@@ -1,10 +1,10 @@
-// import {fingerprintProcessOpenClientResponseKVStorage} from "./fingerprintKVStorage.example";
+// import { saveFingerprintResultToKVStore } from './saveToKVStore'
 import { Plugin } from '../src/utils/registerPlugin'
 
 export default [
-  /*{
-        name: 'Fingerprint Process Open Client Response with Fastly KV Storage',
-        callback: fingerprintProcessOpenClientResponseKVStorage,
-        type: 'processOpenClientResponse',
-    }*/
+  // {
+  //   name: 'Save Fingerprint Result to KV Store',
+  //   callback: saveFingerprintResultToKVStore,
+  //   type: 'processOpenClientResponse',
+  // },
 ] satisfies Plugin[]

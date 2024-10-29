@@ -1,6 +1,6 @@
 {
   "name": "fingerprint-pro-fastly-compute-proxy-integration",
-  "version": "0.1.0-rc.1",
+  "version": "0.1.0",
   "engines": {
     "node": ">=20"
   },
