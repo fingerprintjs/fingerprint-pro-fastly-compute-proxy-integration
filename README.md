@@ -14,6 +14,9 @@
 <a href="https://discord.gg/39EpE2neBg"><img src="https://img.shields.io/discord/852099967190433792?style=logo&label=Discord&logo=Discord&logoColor=white" alt="Discord server"></a>
 </p>
 
+> [!WARNING]
+> This integration is in Beta
+
 # Fingerprint Pro Fastly Compute Proxy Integration
 
 [Fingerprint](https://fingerprint.com) is a device intelligence platform offering highly accurate visitor identification.
@@ -22,7 +25,7 @@ The Fastly Compute Proxy Integration is responsible for proxying identification 
 
 ## 🚧 Requirements and expectations
 
-* **Integration in Beta**: Please report any issues to our support team.
+* **Integration in Beta**: Please report any issues to our [support team](mailto:support@fingerprint.com).
 
 * **Limited to Enterprise customers**: At this point, this proxy integration is accessible and exclusively supported for customers on the  **Enterprise** Plan. Other customers are encouraged to use [Custom subdomain setup](https://dev.fingerprint.com/docs/custom-subdomain-setup) or [Cloudflare Proxy Integration](https://dev.fingerprint.com/docs/cloudflare-integration).
 
