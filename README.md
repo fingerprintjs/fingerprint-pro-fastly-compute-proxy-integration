@@ -25,7 +25,7 @@ The Fastly Compute Proxy Integration is responsible for proxying identification 
 
 ## 🚧 Requirements and expectations
 
-* **Integration in Beta**: Please report any issues to our [support team](mailto:support@fingerprint.com).
+* **Integration in Beta**: Please report any issues to our [support team](https://fingerprint.com/support/).
 
 * **Limited to Enterprise customers**: At this point, this proxy integration is accessible and exclusively supported for customers on the  **Enterprise** Plan. Other customers are encouraged to use [Custom subdomain setup](https://dev.fingerprint.com/docs/custom-subdomain-setup) or [Cloudflare Proxy Integration](https://dev.fingerprint.com/docs/cloudflare-integration).
 
