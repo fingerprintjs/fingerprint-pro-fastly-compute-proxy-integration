@@ -1,0 +1,64 @@
+{
+  "version": "0.0.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.25.2",
+    "@babel/preset-env": "^7.25.4",
+    "@babel/preset-typescript": "^7.24.7",
+    "@commitlint/config-conventional": "^19.4.1",
+    "@fastly/cli": "^10.15.0",
+    "@fingerprintjs/eslint-config-dx-team": "^0.1.0",
+    "@fingerprintjs/fingerprintjs-pro-server-api": "^5.0.0",
+    "@fingerprintjs/prettier-config-dx-team": "^0.2.0",
+    "@fingerprintjs/tsconfig-dx-team": "^0.0.2",
+    "@jest/globals": "^29.7.0",
+    "@noble/ciphers": "^1.0.0",
+    "@types/cookie": "^0.6.0",
+    "@types/jest": "^29.5.12",
+    "@types/node": "^22.7.0",
+    "babel-jest": "^29.7.0",
+    "esbuild": "^0.24.0",
+    "fastly": "7.3.0",
+    "@types/pako": "^2.0.3",
+    "fs": "0.0.1-security",
+    "husky": "^9.1.5",
+    "jest": "^29.7.0",
+    "pako": "^2.1.0",
+    "path": "^0.12.7",
+    "ts-jest": "^29.2.5",
+    "ts-node": "^10.9.2",
+    "ts-loader": "^9.5.1",
+    "tslib": "^2.7.0",
+    "typescript": "5.3.3"
+  },
+  "dependencies": {
+    "@fastly/js-compute": "^3.21.4",
+    "cookie": "0.7.0"
+  },
+  "scripts": {
+    "prebuild": "ts-node build.ts",
+    "assemble": "js-compute-runtime build/index.js bin/main.wasm",
+    "pack": "fastly compute pack --wasm-binary=./bin/main.wasm",
+    "build": "pnpm run prebuild && pnpm run assemble && pnpm run pack",
+    "deploy": "fastly compute publish",
+    "dev": "fastly compute serve",
+    "prepare": "husky",
+    "lint": "eslint --ext .js,.ts,.mjs --ignore-path .gitignore --max-warnings 0 src/",
+    "lint:fix": "pnpm lint --fix",
+    "ci": "ts-node --transpile-only scripts/ci.ts",
+    "test:mock-e2e": "ts-node scripts/mockTests.ts",
+    "test": "jest --config jest.config.js",
+    "test:coverage": "jest --coverage --config jest.config.js",
+    "test:dts": "echo \"No type tests introduced\" && exit 0"
+  },
+  "lint-staged": {
+    "*.{js,ts,mjs}": "pnpm lint:fix"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}

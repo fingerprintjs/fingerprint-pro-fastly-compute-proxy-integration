@@ -1,0 +1,31 @@
+{
+  "extends": "./node_modules/@fingerprintjs/tsconfig-dx-team/tsconfig.json",
+  "compilerOptions": {
+    "strict": true,
+    "module": "es2020",
+    "target": "es2020",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "lib": [ "es2022" ],
+    "rootDir": ".",
+    "outDir": "./build",
+    "skipLibCheck": true,
+    "resolveJsonModule": true
+  },
+  "include": [
+    "./src/**/*.ts",
+    "./scripts/**/*.ts",
+    "./plugins/**/*.ts",
+    "./test/**/*.ts",
+  ],
+  "exclude": [
+    "node_modules",
+    "./plugins/**/*.example.ts"
+  ],
+  "ts-node": {
+    "experimentalSpecifierResolution": "node",
+    "compilerOptions": {
+      "module": "CommonJS"
+    },
+  }
+}

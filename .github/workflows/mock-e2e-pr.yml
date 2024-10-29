@@ -1,0 +1,82 @@
+name: Test e2e for PR
+
+on:
+  pull_request:
+
+jobs:
+  check-changed-files:
+    runs-on: ubuntu-20.04
+    name: Check changed files
+    outputs:
+      NEED_TO_RUN_TESTS: ${{ steps.decision.outputs.NEED_TO_RUN_TESTS }}
+    steps:
+      - name: Git clone
+        uses: actions/checkout@v4
+      - name: Get changed files
+        id: decision
+        run: |
+          git fetch origin $GITHUB_BASE_REF
+          diff=$(git diff --name-only origin/$GITHUB_BASE_REF..HEAD)
+          echo $diff
+          needToRunTests=false
+          for changed_file in $diff; do
+            if [[ ${changed_file} =~ ^(src|plugins)\/.+$ ]]; then
+              needToRunTests=true
+            fi
+            if [[ ${changed_file} =~ ^\.github\/workflows\/.+$ ]]; then
+              needToRunTests=true
+            fi
+          done
+          echo $needToRunTests
+          echo NEED_TO_RUN_TESTS=${needToRunTests} >> $GITHUB_OUTPUT
+  build-and-test-e2e-mock:
+    runs-on: ubuntu-20.04
+    name: Test e2e for PR using mock app
+    needs: check-changed-files
+    if: needs['check-changed-files'].outputs.NEED_TO_RUN_TESTS == 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - name: 'Install pnpm'
+        uses: pnpm/action-setup@129abb77bf5884e578fcaf1f37628e41622cc371
+        with:
+          cache: 'pnpm'
+          version: 8
+      - name: Install node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: '.node-version'
+      - name: Install dependencies
+        run: pnpm install
+      - name: Extract Branch Name
+        id: extract-branch
+        run: |
+          echo SUBDOMAIN=mock-$(echo ${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}} | perl -pe 's/[^a-zA-Z0-9]+/-/g and s/-+$//g' | tr '[:upper:]' '[:lower:]') >> $GITHUB_OUTPUT
+      - name: Set up Fastly CLI
+        uses: fastly/compute-actions/setup@v8
+      - name: Package Fastly WASM File
+        uses: fastly/compute-actions/build@v8
+        with:
+          verbose: true
+        env:
+          CONFIG_STORE_NAME: "E2ETest"
+      - name: Deploy
+        id: deploy
+        env:
+          SERVICE_NAME: "${{steps.extract-branch.outputs.SUBDOMAIN}}.${{secrets.FPJS_CI_DOMAIN}}"
+          DEFAULT_ORIGIN: ${{secrets.DEFAULT_ORIGIN}}
+          FASTLY_API_TOKEN: ${{secrets.FASTLY_API_TOKEN}}
+          FPJS_BACKEND_URL: ${{secrets.MOCK_FPCDN}}
+          FPCDN_URL: ${{secrets.MOCK_FPCDN}}
+          CONFIG_STORE_NAME: "E2ETest"
+        run: pnpm run ci
+      - name: Wait for 60s
+        shell: bash
+        run: sleep 60s
+      - name: Run test
+        run: pnpm test:mock-e2e
+        env:
+          TEST_DOMAIN: 'https://fpjs-fastly-${{steps.extract-branch.outputs.SUBDOMAIN}}.edgecompute.app'
+          INTEGRATION_PATH: ${{secrets.INTEGRATION_PATH}}
+          RESULT_PATH: ${{secrets.RESULT_PATH}}
+          AGENT_PATH: ${{secrets.AGENT_PATH}}
+          API_URL: ${{secrets.MOCK_FPCDN}}

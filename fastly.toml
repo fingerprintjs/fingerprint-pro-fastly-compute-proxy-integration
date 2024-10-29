@@ -1,0 +1,21 @@
+# This file describes a Fastly Compute package. To learn more visit:
+# https://developer.fastly.com/reference/fastly-toml/
+
+authors = []
+cloned_from = "https://github.com/fastly/compute-starter-kit-typescript"
+description = "Fingerprint Proxy Fastly Compute@Edge Package"
+language = "javascript"
+manifest_version = 3
+name = "fingerprint-pro-fastly-proxy-integration"
+service_id = ""
+
+[scripts]
+  build = "pnpm build"
+  post_init = "pnpm install"
+
+#[local_server]
+#  [local_server.backends]
+#    [local_server.backends.fpcdn]
+#      url = "http://localhost:1234"
+#    [local_server.backends.fpjs]
+#      url = "http://localhost:1234"

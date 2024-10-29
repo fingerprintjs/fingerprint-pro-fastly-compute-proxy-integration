@@ -1,0 +1,8 @@
+/node_modules
+/bin
+/build
+/pkg
+.idea/
+/coverage
+.DS_Store
+.vscode/
