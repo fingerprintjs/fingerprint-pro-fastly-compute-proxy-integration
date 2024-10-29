@@ -1,8 +1,8 @@
-// To enable this plugin, please replace the suffix from `.example.ts` to `.ts`
+// To enable this plugin, add an entry to `/plugins/index.ts`
 
 import { KVStore } from 'fastly:kv-store'
 import { ProcessOpenClientResponseContext } from '../src/utils/registerPlugin'
-export async function fingerprintProcessOpenClientResponseKVStorage(context: ProcessOpenClientResponseContext) {
+export async function saveFingerprintResultToKVStore(context: ProcessOpenClientResponseContext) {
   const requestId = context.event?.products.identification?.data?.requestId
   if (!requestId) {
     return

@@ -18,10 +18,7 @@
     "./plugins/**/*.ts",
     "./test/**/*.ts",
   ],
-  "exclude": [
-    "node_modules",
-    "./plugins/**/*.example.ts"
-  ],
+  "exclude": ["node_modules"],
   "ts-node": {
     "experimentalSpecifierResolution": "node",
     "compilerOptions": {
