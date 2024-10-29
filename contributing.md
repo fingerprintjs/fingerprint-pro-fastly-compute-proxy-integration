@@ -1,4 +1,4 @@
-# Contributing to Fingerprint Pro Fastly Compute@Edge Proxy Integration
+# Contributing to Fingerprint Pro Fastly Compute Proxy Integration
 
 ## Requirements
 

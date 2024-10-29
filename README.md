@@ -13,7 +13,7 @@
 <a href="https://discord.gg/39EpE2neBg"><img src="https://img.shields.io/discord/852099967190433792?style=logo&label=Discord&logo=Discord&logoColor=white" alt="Discord server"></a>
 </p>
 
-# Fingerprint Pro Fastly Compute@Edge Proxy Integration
+# Fingerprint Pro Fastly Compute Proxy Integration
 
 [Fingerprint](https://fingerprint.com) is a device intelligence platform offering highly accurate visitor identification.
 
@@ -23,11 +23,11 @@ The Fastly Compute Proxy Integration is responsible for proxying identification 
 
 * **Limited to Enterprise customers**: At this point, this proxy integration is accessible and exclusively supported for customers on the  **Enterprise** Plan. Other customers are encouraged to use [Custom subdomain setup](https://dev.fingerprint.com/docs/custom-subdomain-setup) or [Cloudflare Proxy Integration](https://dev.fingerprint.com/docs/cloudflare-integration).
 
-* **Manual updates occasionally required**: The underlying data contract in the identification logic can change to keep up with browser updates. Using the Fastly Compute@Edge Proxy Integration might require occasional manual updates on your side. Ignoring these updates will lead to lower accuracy or service disruption.
+* **Manual updates occasionally required**: The underlying data contract in the identification logic can change to keep up with browser updates. Using the Fastly Compute Proxy Integration might require occasional manual updates on your side. Ignoring these updates will lead to lower accuracy or service disruption.
 
 ## Getting started
 
-This is a quick overview of the installation setup. For detailed step-by-step instructions, see the [Fastly Compute@Edge proxy integration guide in our documentation](https://dev.fingerprint.com/docs/fastly-compute-edge-proxy-integration).
+This is a quick overview of the installation setup. For detailed step-by-step instructions, see the [Fastly Compute proxy integration guide in our documentation](https://dev.fingerprint.com/docs/fastly-compute-edge-proxy-integration).
 
 1. Go to the Fingerprint Dashboard > [**API Keys**](https://dashboard.fingerprint.com/api-keys) and click **Create Proxy Key** to create a proxy secret. You will use it later to authenticate your requests to Fingerprint APIs.
 
@@ -59,7 +59,7 @@ This is a quick overview of the installation setup. For detailed step-by-step in
    });
    ```
 
-See the [Fastly Compute@Edge proxy integration guide](https://dev.fingerprint.com/docs/fastly-compute-edge-proxy-integration#step-9-configure-the-fingerprint-client-agent-on-to-use-your-service) in our documentation for more details.
+See the [Fastly Compute proxy integration guide](https://dev.fingerprint.com/docs/fastly-compute-edge-proxy-integration#step-9-configure-the-fingerprint-client-agent-on-to-use-your-service) in our documentation for more details.
 
 ### Using a custom config store name
 

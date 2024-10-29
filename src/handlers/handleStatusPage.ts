@@ -107,7 +107,7 @@ function buildBody(env: IntegrationEnv, styleNonce: string): string {
   <html lang='en-US'>
   <head>
     <meta charset='utf-8'/>
-    <title>Fingerprint Pro Fastly Compute@Edge Integration</title>
+    <title>Fingerprint Pro Fastly Compute Integration</title>
     <link rel='icon' type='image/x-icon' href='https://fingerprint.com/img/favicon.ico'>
     <style nonce='${styleNonce}'>
       h1, span {
@@ -119,7 +119,7 @@ function buildBody(env: IntegrationEnv, styleNonce: string): string {
     </style>
   </head>
   <body>
-    <h1>Fingerprint Pro Fastly Compute@Edge Integration</h1>
+    <h1>Fingerprint Pro Fastly Compute Integration</h1>
   `
 
   body += `<span>🎉 Your Fastly Integration is deployed</span>`
