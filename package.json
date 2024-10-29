@@ -10,6 +10,7 @@
     "@babel/preset-typescript": "^7.24.7",
     "@fastly/cli": "^10.15.0",
     "@fingerprintjs/commit-lint-dx-team": "^0.1.0",
+    "@fingerprintjs/conventional-changelog-dx-team": "^0.1.0",
     "@fingerprintjs/eslint-config-dx-team": "^0.1.0",
     "@fingerprintjs/fingerprintjs-pro-server-api": "^5.0.0",
     "@fingerprintjs/prettier-config-dx-team": "^0.2.0",
