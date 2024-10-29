@@ -1,4 +1,4 @@
-// import {fingerprintProcessOpenClientResponseKVStorage} from "./fingerprintKVStorage.example";
+// import {fingerprintProcessOpenClientResponseKVStorage} from "./fingerprintKVStorage";
 import { Plugin } from '../src/utils/registerPlugin'
 
 export default [

@@ -19,8 +19,7 @@
     "./test/**/*.ts",
   ],
   "exclude": [
-    "node_modules",
-    "./plugins/**/*.example.ts"
+    "node_modules"
   ],
   "ts-node": {
     "experimentalSpecifierResolution": "node",
