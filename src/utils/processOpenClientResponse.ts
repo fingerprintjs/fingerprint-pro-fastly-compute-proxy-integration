@@ -19,7 +19,7 @@ export async function processOpenClientResponse(body: string | undefined, respon
     throw new Error('Decryption key not found in secret store')
   }
   const parsedText = JSON.parse(body ?? '') as FingerprintSealedIngressResponseBody
-  const event = await unsealData(parsedText.sealedResult, decryptionKey)
+  const event = unsealData(parsedText.sealedResult, decryptionKey)
   const filteredPlugins = plugins.filter((t) => t.type === 'processOpenClientResponse')
   for (const filteredPlugin of filteredPlugins) {
     try {

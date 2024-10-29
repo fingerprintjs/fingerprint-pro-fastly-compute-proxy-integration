@@ -24,12 +24,12 @@ importers:
       '@babel/preset-typescript':
         specifier: ^7.24.7
         version: 7.25.9(@babel/core@7.25.9)
-      '@commitlint/config-conventional':
-        specifier: ^19.4.1
-        version: 19.5.0
       '@fastly/cli':
         specifier: ^10.15.0
         version: 10.15.0
+      '@fingerprintjs/commit-lint-dx-team':
+        specifier: ^0.1.0
+        version: 0.1.0
       '@fingerprintjs/eslint-config-dx-team':
         specifier: ^0.1.0
         version: 0.1.0(prettier@3.2.4)(typescript@5.3.3)
@@ -752,13 +752,9 @@ packages:
     engines: {node: '>=16'}
     hasBin: true
 
-  '@commitlint/config-conventional@19.5.0':
-    resolution: {integrity: sha512-OBhdtJyHNPryZKg0fFpZNOBM1ZDbntMvqMuSmpfyP86XSfwzGw4CaoYRG4RutUPg0BTK07VMRIkNJT6wi2zthg==}
-    engines: {node: '>=v18'}
-
-  '@commitlint/types@19.5.0':
-    resolution: {integrity: sha512-DSHae2obMSMkAtTBSOulg5X7/z+rGLxcXQIkg3OmWvY6wifojge5uVMydfhUvs7yQj+V7jNmRZ2Xzl8GJyqRgg==}
-    engines: {node: '>=v18'}
+  '@commitlint/config-conventional@17.8.1':
+    resolution: {integrity: sha512-NxCOHx1kgneig3VLauWJcDWS40DVjg7nKOpBEEK9E5fjJpQqLCilcnKkIIjdBH98kEO1q3NpE5NSrZ2kl/QGJg==}
+    engines: {node: '>=v14'}
 
   '@cspotcode/source-map-support@0.8.1':
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
@@ -991,6 +987,9 @@ packages:
   '@fastly/js-compute@3.25.0':
     resolution: {integrity: sha512-wSmc8FOH8hdl/swTV2c44eau5yMMrulZVFxZsVye2tlje8XBGAv/ogSFXRHiEXDyUSxHwUIyr2DRUSz5qpRgLQ==}
     hasBin: true
+
+  '@fingerprintjs/commit-lint-dx-team@0.1.0':
+    resolution: {integrity: sha512-MSYn4bRt9Iyob8hB3Oc/IXz3O8DA2E3ccqlG46pYYhdF090W6u9BNa9uCaVg611FUzqMU41+vs8ztXLkICbKkw==}
 
   '@fingerprintjs/eslint-config-dx-team@0.1.0':
     resolution: {integrity: sha512-Yet9e0dDGmAhMsXnnRWbvTAWLlA2qWGvsOBnRscZtlJnv/Xm4xzurR4C4bqPBcX3rVZkedv9dBTLW3t/wRY0mA==}
@@ -1281,9 +1280,6 @@ packages:
 
   '@types/babel__traverse@7.20.6':
     resolution: {integrity: sha512-r1bzfrm0tomOI8g1SzvCaQHo6Lcv6zu0EA+W2kHrt8dyrHQxGzBBL4kdkzIS+jBMV+EYcMAEAqXqYaLJq5rOZg==}
-
-  '@types/conventional-commits-parser@5.0.0':
-    resolution: {integrity: sha512-loB369iXNmAZglwWATL+WRe+CRMmmBPtpolYzIebFaX4YA3x+BEfLqhUAV9WanycKI3TG1IMr5bMJDajDKLlUQ==}
 
   '@types/cookie@0.6.0':
     resolution: {integrity: sha512-4Kh9a6B2bQciAhf7FSuMRRkUWecJgJu9nPnx3yzpsfXX/c50REIqpHY4C82bXP90qrLtXtkDxTZosYO3UpOwlA==}
@@ -1711,9 +1707,9 @@ packages:
   concat-map@0.0.1:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
 
-  conventional-changelog-conventionalcommits@7.0.2:
-    resolution: {integrity: sha512-NKXYmMR/Hr1DevQegFB4MwfM5Vv0m4UIxKZTTYuD98lpTknaZlSRrDOG4X7wIXpGkfsYxZTghUN+Qq+T0YQI7w==}
-    engines: {node: '>=16'}
+  conventional-changelog-conventionalcommits@6.1.0:
+    resolution: {integrity: sha512-3cS3GEtR78zTfMzk0AizXKKIdN4OvSh7ibNz6/DPbhWWQu7LqE/8+/GqSodV+sywUR2gpJAdP/1JFf4XtN7Zpw==}
+    engines: {node: '>=14'}
 
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
@@ -4021,15 +4017,9 @@ snapshots:
       '@bytecodealliance/wizer-linux-x64': 7.0.5
       '@bytecodealliance/wizer-win32-x64': 7.0.5
 
-  '@commitlint/config-conventional@19.5.0':
+  '@commitlint/config-conventional@17.8.1':
     dependencies:
-      '@commitlint/types': 19.5.0
-      conventional-changelog-conventionalcommits: 7.0.2
-
-  '@commitlint/types@19.5.0':
-    dependencies:
-      '@types/conventional-commits-parser': 5.0.0
-      chalk: 5.3.0
+      conventional-changelog-conventionalcommits: 6.1.0
 
   '@cspotcode/source-map-support@0.8.1':
     dependencies:
@@ -4191,6 +4181,10 @@ snapshots:
       esbuild: 0.24.0
       magic-string: 0.30.12
       regexpu-core: 6.1.1
+
+  '@fingerprintjs/commit-lint-dx-team@0.1.0':
+    dependencies:
+      '@commitlint/config-conventional': 17.8.1
 
   '@fingerprintjs/eslint-config-dx-team@0.1.0(prettier@3.2.4)(typescript@5.3.3)':
     dependencies:
@@ -4563,10 +4557,6 @@ snapshots:
   '@types/babel__traverse@7.20.6':
     dependencies:
       '@babel/types': 7.25.9
-
-  '@types/conventional-commits-parser@5.0.0':
-    dependencies:
-      '@types/node': 22.7.9
 
   '@types/cookie@0.6.0': {}
 
@@ -5063,7 +5053,7 @@ snapshots:
 
   concat-map@0.0.1: {}
 
-  conventional-changelog-conventionalcommits@7.0.2:
+  conventional-changelog-conventionalcommits@6.1.0:
     dependencies:
       compare-func: 2.0.0
 
