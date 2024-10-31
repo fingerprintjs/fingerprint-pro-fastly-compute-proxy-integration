@@ -21,7 +21,7 @@ export async function createService(domain: string) {
   })
   await createDomain(domain, createResponse.id)
   await createOrigin(createResponse.id, domain)
-  const configStore = await createConfigStore()
+  const configStore = await createConfigStore(createResponse.id)
   console.log('config store created')
   console.log('linking config store')
   await linkConfigStore(createResponse.id, 1, configStore.id)
@@ -69,26 +69,28 @@ async function createDomain(domain: string, serviceId: string) {
 }
 
 async function linkConfigStore(service_id: string, version_id: number, resource_id: string) {
+  const configStoreNameWithPrefix = `${service_id}_${CONFIG_STORE_NAME}`
   return createClient('resource').createResource({
     service_id,
     version_id,
     resource_id,
-    name: CONFIG_STORE_NAME,
+    name: configStoreNameWithPrefix,
   })
 }
 
-async function createConfigStore() {
+async function createConfigStore(service_id: string) {
   console.log('Creating config store')
+  const configStoreNameWithPrefix = `${service_id}_${CONFIG_STORE_NAME}`
   const configStoreClient = createClient('configStore')
   const configStoreItemClient = createClient('configStoreItem')
   let configStore
   try {
     configStore = await configStoreClient.createConfigStore({
-      name: CONFIG_STORE_NAME,
+      name: configStoreNameWithPrefix,
     })
   } catch (_) {
     const stores = await configStoreClient.listConfigStores()
-    return stores.find((t: any) => t.name === CONFIG_STORE_NAME)
+    return stores.find((t: any) => t.name === configStoreNameWithPrefix)
   }
   await configStoreItemClient.createConfigStoreItem({
     config_store_id: configStore.id,
