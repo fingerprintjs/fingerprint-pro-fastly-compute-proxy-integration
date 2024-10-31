@@ -23,10 +23,10 @@ export async function handleRequest(event: FetchEvent): Promise<Response> {
 
 function getEnvObject(): IntegrationEnv {
   const serviceId = env('FASTLY_SERVICE_ID')
-  const configStoreName = process.env.CONFIG_STORE_NAME ?? 'Fingerprint'
+  const configStoreNamePrefix = process.env.CONFIG_STORE_NAME_PREFIX
   let config
   try {
-    config = new ConfigStore(`${configStoreName}_${serviceId}`)
+    config = new ConfigStore(`${configStoreNamePrefix}_${serviceId}`)
   } catch (e) {
     console.error(e)
   }

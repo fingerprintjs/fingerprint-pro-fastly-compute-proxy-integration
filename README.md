@@ -66,15 +66,15 @@ See the [Fastly Compute proxy integration guide](https://dev.fingerprint.com/doc
 
 ### Using a custom config store name
 
-The Fastly Compute package provided in Releases assumes the config store used by the integration is named `Fingerprint` with prefix of your Fastly Compute Service id. If you need to use a different config store name, you can pass the name to the `CONFIG_STORE_NAME` environment variable and build a custom worker package:
+The Fastly Compute package provided in Releases assumes the config store used by the integration is named `Fingerprint` with prefix of your Fastly Compute Service id. If you need to use a different config store name, you can pass the name to the `CONFIG_STORE_NAME_PREFIX` environment variable and build a custom worker package:
 
 ```shell
-CONFIG_STORE_NAME=MyCustomStoreName pnpm run build
+CONFIG_STORE_NAME_PREFIX=MyCustomStoreNamePrefix pnpm run build
 ```
 
 The outcome of artifact will look like this: `<Your fastly compute service id>_<Config store name (default to: Fingerprint)>`
-For example: `MxLpeV9YSRbQKxlGpCVnD5_Fingerprint` if you use the artifact in the release.
-Or: `MxLpeV9YSRbQKxlGpCVnD5_MyCustomConfigStoreName` if you build your own artifact with a custom config store name.
+For example: `Fingerprint_Fastly_Compute_Proxy_Integration_MxLpeV9YSRbQKxlGpCVnD5` if you use the artifact in the release.
+Or: `MyCustomConfigStoreName_MxLpeV9YSRbQKxlGpCVnD5` if you build your own artifact with a custom config store name.
 
 ## Feedback and support
 
