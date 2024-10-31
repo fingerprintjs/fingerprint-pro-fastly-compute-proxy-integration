@@ -26,7 +26,7 @@ function getEnvObject(): IntegrationEnv {
   const configStoreName = process.env.CONFIG_STORE_NAME ?? 'Fingerprint'
   let config
   try {
-    config = new ConfigStore(`${serviceId}_${configStoreName}`)
+    config = new ConfigStore(`${configStoreName}_${serviceId}`)
   } catch (e) {
     console.error(e)
   }

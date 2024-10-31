@@ -69,7 +69,7 @@ async function createDomain(domain: string, serviceId: string) {
 }
 
 async function linkConfigStore(service_id: string, version_id: number, resource_id: string) {
-  const configStoreNameWithPrefix = `${service_id}_${CONFIG_STORE_NAME}`
+  const configStoreNameWithPrefix = `${CONFIG_STORE_NAME}_${service_id}`
   return createClient('resource').createResource({
     service_id,
     version_id,
@@ -80,7 +80,7 @@ async function linkConfigStore(service_id: string, version_id: number, resource_
 
 async function createConfigStore(service_id: string) {
   console.log('Creating config store')
-  const configStoreNameWithPrefix = `${service_id}_${CONFIG_STORE_NAME}`
+  const configStoreNameWithPrefix = `${CONFIG_STORE_NAME}_${service_id}`
   const configStoreClient = createClient('configStore')
   const configStoreItemClient = createClient('configStoreItem')
   let configStore
