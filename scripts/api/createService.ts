@@ -88,7 +88,8 @@ async function createConfigStore(service_id: string) {
     configStore = await configStoreClient.createConfigStore({
       name: configStoreNameWithPrefix,
     })
-  } catch (_) {
+  } catch (e) {
+    console.error('Could not create config store', e)
     const stores = await configStoreClient.listConfigStores()
     return stores.find((t: any) => t.name === configStoreNameWithPrefix)
   }
