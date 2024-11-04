@@ -94,7 +94,9 @@ async function createSecretStore(service_id: string) {
   let secretStore
   try {
     secretStore = await secretStoreClient.createSecretStore({
-      name: secretStoreNameWithPrefix,
+      secret_store: {
+        name: secretStoreNameWithPrefix,
+      },
     })
   } catch (e) {
     console.error('Could not create secret store', e)
