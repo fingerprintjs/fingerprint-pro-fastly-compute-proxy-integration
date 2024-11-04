@@ -3,6 +3,7 @@ import { handleRequest } from '../../src'
 import { expect } from '@jest/globals'
 import { ConfigStore } from 'fastly:config-store'
 import packageJson from '../../package.json'
+import { SecretStore } from 'fastly:secret-store'
 
 describe('Status Page', () => {
   it('should return text/html with status 200', async () => {
@@ -40,9 +41,11 @@ describe('Status Page', () => {
     // @ts-ignore
     config.set('GET_RESULT_PATH', 'result')
     // @ts-ignore
-    config.set('PROXY_SECRET', 'secret')
-    // @ts-ignore
     config.set('OPEN_CLIENT_RESPONSE_ENABLED', 'true')
+
+    const secretStore = new SecretStore('Fingerprint')
+    // @ts-ignore
+    secretStore.set('PROXY_SECRET', 'secret')
 
     const request = makeRequest(new URL('https://test/status'))
     const response = await handleRequest(request)

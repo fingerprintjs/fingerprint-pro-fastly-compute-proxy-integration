@@ -105,7 +105,7 @@ async function createSecretStore(service_id: string) {
   }
 
   await secretStoreItemClient.createSecret({
-    store_id: secretStore.id,
+    secret_store_id: secretStore.id,
     secret: {
       name: 'PROXY_SECRET',
       secret: process.env.PROXY_SECRET ?? 'secret',
