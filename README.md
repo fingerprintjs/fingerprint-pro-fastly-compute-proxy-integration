@@ -72,7 +72,7 @@ The Fastly Compute package provided in releases assumes the Config store used by
 CONFIG_STORE_NAME_PREFIX=MyCustomStoreNamePrefix pnpm run build
 ```
 
-The outcome of artifact will look like this: `<Your fastly compute service id>_<Config store name (default to: Fingerprint_Fastly_Compute_Proxy_Integration)>`
+The outcome of artifact will look like this: `<Config store name (default to: Fingerprint_Fastly_Compute_Proxy_Integration)>_<Your fastly compute service id>`
 For example: `Fingerprint_Fastly_Compute_Proxy_Integration_MxLpeV9YSRbQKxlGpCVnD5` if you use the artifact in the release.
 Or: `MyCustomConfigStoreName_MxLpeV9YSRbQKxlGpCVnD5` if you build your own artifact with a custom config store name.
 
