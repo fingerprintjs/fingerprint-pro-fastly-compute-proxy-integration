@@ -34,25 +34,25 @@ This is a quick overview of the installation setup. For detailed step-by-step in
 
 1. Go to the Fingerprint Dashboard > [**API Keys**](https://dashboard.fingerprint.com/api-keys) and click **Create Proxy Key** to create a proxy secret. You will use it later to authenticate your requests to Fingerprint APIs.
 
-2. [Create a Compute Service](https://docs.fastly.com/en/guides/working-with-compute-services#creating-a-new-compute-service) in your Fastly account, with Empty Service option.
+2. [Create an empty Compute Service](https://docs.fastly.com/en/guides/working-with-compute-services#creating-a-new-compute-service) in your Fastly account.
 
-2. [Create a Config store](https://docs.fastly.com/en/guides/working-with-config-stores#creating-a-config-store) in your Fastly account named exactly `Fingerprint_Fastly_Compute_Proxy_Integration_ConfigStore_<SERVICE_ID>`, where the suffix is your proxy integration's [Compute Service ID](https://docs.fastly.com/en/guides/about-services). And add the following values:
+3. [Create a Config store](https://docs.fastly.com/en/guides/working-with-config-stores#creating-a-config-store) named `Fingerprint_Fastly_Compute_Proxy_Integration_ConfigStore_<SERVICE_ID>`, where the suffix is your proxy integration's [Compute Service ID](https://docs.fastly.com/en/guides/about-services). And add the following values:
 
-   | Key                          | Example Value        | Description                                                                                                                                                             |
-   |------------------------------|----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-   | AGENT_SCRIPT_DOWNLOAD_PATH   | z5kms2               | Random path segment for downloading the JavaScript agent.                                                                                                               |
-   | GET_RESULT_PATH              | nocmjw               | Random path segment for Fingerprint identification requests.                                                                                                            |
-   | OPEN_CLIENT_RESPONSE_ENABLED | false                | Set to `true` if you have [Open client response](https://dev.fingerprint.com/docs/open-client-response) enabled for your Fingerprint application. Defaults to `false`.  |
+   | Key                          | Example Value | Description                                                                                                                                                            |
+   | ---------------------------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+   | AGENT_SCRIPT_DOWNLOAD_PATH   | z5kms2        | Random path segment for downloading the JavaScript agent.                                                                                                              |
+   | GET_RESULT_PATH              | nocmjw        | Random path segment for Fingerprint identification requests.                                                                                                           |
+   | OPEN_CLIENT_RESPONSE_ENABLED | false         | Set to `true` if you have [Open client response](https://dev.fingerprint.com/docs/open-client-response) enabled for your Fingerprint application. Defaults to `false`. |
 
-3. [Create a Secret store](https://docs.fastly.com/en/guides/working-with-secret-stores#creating-a-secret-store) in your Fastly account named exactly `Fingerprint_Fastly_Compute_Proxy_Integration_SecretStore_<SERVICE_ID>`, where the suffix is your proxy integration's [Compute Service ID](https://docs.fastly.com/en/guides/about-services). And add the following values:
+4. [Create a Secret store](https://docs.fastly.com/en/guides/working-with-secret-stores#creating-a-secret-store) named `Fingerprint_Fastly_Compute_Proxy_Integration_SecretStore_<SERVICE_ID>`, where the suffix is your proxy integration's [Compute Service ID](https://docs.fastly.com/en/guides/about-services). Add your proxy secret:
 
-   | Key           | Example Value         | Description                                    |
-   |---------------|-----------------------|------------------------------------------------|
-   | PROXY_SECRET  | 6XI9CLf3C9oHSB12TTaI  | Fingerprint proxy secret generated in Step 1.  |
+   | Key          | Example Value        | Description                                   |
+   | ------------ | -------------------- | --------------------------------------------- |
+   | PROXY_SECRET | 6XI9CLf3C9oHSB12TTaI | Fingerprint proxy secret generated in Step 1. |
 
-4. Go to [Releases](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/releases) to download the latest `fingerprint-proxy-integration.tar.gz` package file.
-5. Upload package to your Fastly Compute Service's **Package**.
-6. Configure the Fingerprint [JavaScript Agent](https://dev.fingerprint.com/docs/install-the-javascript-agent#configuring-the-agent) on your website using the paths defined in Step 2.
+5. Go to [Releases](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/releases) to download the latest `fingerprint-proxy-integration.tar.gz` package file.
+6. Upload package to your Fastly Compute Service's **Package**.
+7. Configure the Fingerprint [JavaScript Agent](https://dev.fingerprint.com/docs/install-the-javascript-agent#configuring-the-agent) on your website using the paths defined in Step 3.
     ```javascript
    import * as FingerprintJS from '@fingerprintjs/fingerprintjs-pro'
 
@@ -71,26 +71,24 @@ This is a quick overview of the installation setup. For detailed step-by-step in
 
 See the [Fastly Compute proxy integration guide](https://dev.fingerprint.com/docs/fastly-compute-proxy-integration#step-4-configure-the-fingerprint-client-agent-to-use-your-service) in our documentation for more details.
 
-### Using a Custom Store Name for ConfigStore and SecretStore
+### Using custom store names
 
-By default, the Fastly Compute package provided in releases assumes that the integration uses ConfigStore and SecretStore names with the prefix `Fingerprint_Fastly_Compute_Proxy_Integration`. Specifically:
+By default, the service package provided in releases assumes the following names for the Config store and Secret Store:
 
-**ConfigStore**: Named `Fingerprint_Fastly_Compute_Proxy_Integration_ConfigStore_<SERVICE_ID>`
-**SecretStore**: Named `Fingerprint_Fastly_Compute_Proxy_Integration_SecretStore_<SERVICE_ID>`
-Here, `<SERVICE_ID>` represents your proxy integration's [Compute Service ID](https://docs.fastly.com/en/guides/about-services).
+* `Fingerprint_Fastly_Compute_Proxy_Integration_ConfigStore_<SERVICE_ID>`
+* `Fingerprint_Fastly_Compute_Proxy_Integration_SecretStore_<SERVICE_ID>`
 
-If you need to customize the naming prefix for both the ConfigStore and SecretStore, set the `STORE_NAME_PREFIX` environment variable and build a custom service package:
+To use a custom name prefix for both stores, use the `STORE_NAME_PREFIX` environment variable to build a custom service package:
 
 ```shell=
-STORE_NAME_PREFIX=MyCustomStoreNamePrefix pnpm run build
+STORE_NAME_PREFIX=CustomName pnpm run build
 ```
 
-After setting `STORE_NAME_PREFIX` and building the package, the following store names will be used:
+Your custom built package will then use your prefix in config store names like:
 
-**ConfigStore**: `MyCustomStoreNamePrefix_ConfigStore_<SERVICE_ID>`
-**SecretStore**: `MyCustomStoreNamePrefix_SecretStore_<SERVICE_ID>`
+* `CustomName_ConfigStore_<SERVICE_ID>`
+* `CustomName_SecretStore_<SERVICE_ID>`
 
-This customization allows you to align store names with your organizational conventions or project requirements.
 
 ## Feedback and support
 
