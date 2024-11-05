@@ -58,7 +58,7 @@ jobs:
         with:
           verbose: true
         env:
-          CONFIG_STORE_NAME: "E2ETest"
+          CONFIG_STORE_NAME_PREFIX: "E2ETest"
       - name: Deploy
         id: deploy
         env:
@@ -67,7 +67,7 @@ jobs:
           FASTLY_API_TOKEN: ${{secrets.FASTLY_API_TOKEN}}
           FPJS_BACKEND_URL: ${{secrets.MOCK_FPCDN}}
           FPCDN_URL: ${{secrets.MOCK_FPCDN}}
-          CONFIG_STORE_NAME: "E2ETest"
+          CONFIG_STORE_NAME_PREFIX: "E2ETest"
         run: pnpm run ci
       - name: Wait for 60s
         shell: bash
