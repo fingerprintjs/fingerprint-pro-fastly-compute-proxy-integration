@@ -36,7 +36,7 @@ This is a quick overview of the installation setup. For detailed step-by-step in
 
 2. [Create an empty Compute Service](https://docs.fastly.com/en/guides/working-with-compute-services#creating-a-new-compute-service) in your Fastly account.
 
-3. [Create a Config store](https://docs.fastly.com/en/guides/working-with-config-stores#creating-a-config-store) named `Fingerprint_Fastly_Compute_Proxy_Integration_ConfigStore_<SERVICE_ID>`, where the suffix is your proxy integration's [Compute Service ID](https://docs.fastly.com/en/guides/about-services). And add the following values:
+3. [Create a Config store](https://docs.fastly.com/en/guides/working-with-config-stores#creating-a-config-store) named `Fingerprint_Fastly_Compute_Proxy_Integration_ConfigStore_<SERVICE_ID>`, where the suffix is your proxy integration's [Compute Service ID](https://docs.fastly.com/en/guides/about-services). Add the following values:
 
    | Key                          | Example Value | Description                                                                                                                                                            |
    | ---------------------------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -84,7 +84,7 @@ To use a custom name prefix for both stores, use the `STORE_NAME_PREFIX` environ
 STORE_NAME_PREFIX=CustomName pnpm run build
 ```
 
-Your custom built package will then use your prefix in config store names like:
+Your custom built package in `pkg/package.tar.gz` will use your custom prefix in store names like:
 
 * `CustomName_ConfigStore_<SERVICE_ID>`
 * `CustomName_SecretStore_<SERVICE_ID>`
