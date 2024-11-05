@@ -2,6 +2,7 @@
 import { handleReq } from './handler'
 import {
   agentScriptDownloadPathVarName,
+  decryptionKeyVarName,
   getResultPathVarName,
   IntegrationEnv,
   openClientResponseVarName,
@@ -31,38 +32,22 @@ export async function handleRequest(event: FetchEvent): Promise<Response> {
 async function getEnvObject(): Promise<IntegrationEnv> {
   const serviceId = env('FASTLY_SERVICE_ID')
   const storeNamePrefix = process.env.STORE_NAME_PREFIX
-  const storeName = `${storeNamePrefix}_${serviceId}`
+  const configStoreName = `${storeNamePrefix}_ConfigStore_${serviceId}`
+  const secretStoreName = `${storeNamePrefix}_SecretStore_${serviceId}`
   let configStore
   let secretStore
   try {
-    configStore = new ConfigStore(storeName)
-    secretStore = new SecretStore(storeName)
+    configStore = new ConfigStore(configStoreName)
+    secretStore = new SecretStore(secretStoreName)
   } catch (e) {
     console.error(e)
   }
 
-  let config: IntegrationEnv = {
-    AGENT_SCRIPT_DOWNLOAD_PATH: null,
-    GET_RESULT_PATH: null,
-    PROXY_SECRET: null,
-    OPEN_CLIENT_RESPONSE_ENABLED: 'false',
+  return {
+    AGENT_SCRIPT_DOWNLOAD_PATH: configStore?.get(agentScriptDownloadPathVarName) ?? null,
+    GET_RESULT_PATH: configStore?.get(getResultPathVarName) ?? null,
+    OPEN_CLIENT_RESPONSE_ENABLED: configStore?.get(openClientResponseVarName) ?? 'false',
+    PROXY_SECRET: (await secretStore?.get(proxySecretVarName))?.plaintext() ?? null,
+    DECRYPTION_KEY: (await secretStore?.get(decryptionKeyVarName))?.plaintext() ?? null,
   }
-
-  if (configStore != null) {
-    config = {
-      ...config,
-      AGENT_SCRIPT_DOWNLOAD_PATH: configStore.get(agentScriptDownloadPathVarName),
-      GET_RESULT_PATH: configStore.get(getResultPathVarName),
-      OPEN_CLIENT_RESPONSE_ENABLED: configStore.get(openClientResponseVarName),
-    }
-  }
-
-  if (secretStore != null) {
-    config = {
-      ...config,
-      PROXY_SECRET: (await secretStore.get(proxySecretVarName))?.plaintext() ?? null,
-    }
-  }
-
-  return config
 }

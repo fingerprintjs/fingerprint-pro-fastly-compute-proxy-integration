@@ -31,7 +31,7 @@ export async function createService(domain: string) {
   console.log('config store linked')
 
   console.log('linking secret store')
-  await linkStoreResource(createResponse.id, 1, secretStore.id)
+  await linkStoreResource(createResponse.id, 1, secretStore.id, 'secret')
   console.log('secret store linked')
 
   console.log('deploying package')
@@ -76,8 +76,13 @@ async function createDomain(domain: string, serviceId: string) {
   })
 }
 
-async function linkStoreResource(service_id: string, version_id: number, resource_id: string) {
-  const storeNameWithPrefix = `${STORE_NAME_PREFIX}_${service_id}`
+async function linkStoreResource(
+  service_id: string,
+  version_id: number,
+  resource_id: string,
+  type: 'secret' | 'config' = 'config'
+) {
+  const storeNameWithPrefix = `${STORE_NAME_PREFIX}_${type === 'config' ? 'ConfigStore' : 'SecretStore'}_${service_id}`
   return createClient('resource').createResource({
     service_id,
     version_id,
@@ -88,7 +93,7 @@ async function linkStoreResource(service_id: string, version_id: number, resourc
 
 async function createSecretStore(service_id: string) {
   console.log('Creating secret store')
-  const secretStoreNameWithPrefix = `${STORE_NAME_PREFIX}_${service_id}`
+  const secretStoreNameWithPrefix = `${STORE_NAME_PREFIX}_SecretStore_${service_id}`
   const secretStoreClient = createClient('secretStore')
   const secretStoreItemClient = createClient('secretStoreItem')
   let secretStore
@@ -105,11 +110,11 @@ async function createSecretStore(service_id: string) {
   }
 
   await secretStoreItemClient.createSecret({
-    store_id: secretStore.id,
     secret: {
       name: 'PROXY_SECRET',
-      secret: process.env.PROXY_SECRET ?? 'secret',
+      secret: btoa(process.env.PROXY_SECRET ?? 'secret'),
     },
+    store_id: secretStore.id,
   })
 
   return secretStore
@@ -117,7 +122,7 @@ async function createSecretStore(service_id: string) {
 
 async function createConfigStore(service_id: string) {
   console.log('Creating config store')
-  const configStoreNameWithPrefix = `${STORE_NAME_PREFIX}_${service_id}`
+  const configStoreNameWithPrefix = `${STORE_NAME_PREFIX}_ConfigStore_${service_id}`
   const configStoreClient = createClient('configStore')
   const configStoreItemClient = createClient('configStoreItem')
   let configStore

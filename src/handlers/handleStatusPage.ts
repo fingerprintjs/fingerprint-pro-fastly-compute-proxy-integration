@@ -8,6 +8,9 @@ import {
   proxySecretVarName,
   isOpenClientResponseSet,
   openClientResponseVarName,
+  isDecryptionKeySet,
+  decryptionKeyVarName,
+  isOpenClientResponseEnabled,
 } from '../env'
 import packageJson from '../../package.json'
 
@@ -52,6 +55,7 @@ function createEnvVarsInformationElement(env: IntegrationEnv): string {
   const isGetResultPathAvailable = isGetResultPathSet(env)
   const isProxySecretAvailable = isProxySecretSet(env)
   const isOpenClientResponseVarSet = isOpenClientResponseSet(env)
+  const isDecryptionKeyVarSet = isDecryptionKeySet(env)
   const isAllVarsAvailable = isScriptDownloadPathAvailable && isGetResultPathAvailable && isProxySecretAvailable
 
   let result = ''
@@ -94,6 +98,15 @@ function createEnvVarsInformationElement(env: IntegrationEnv): string {
     result += `
       <span>
       ⚠️ <strong>${openClientResponseVarName} </strong> optional environment variable is not set<br />
+         <i>This environment variable is optional; your integration will work without the 'Open Client Response' feature. If you didn't set it intentionally, you can ignore this warning.</i>
+      </span>
+      `
+  }
+
+  if (isOpenClientResponseEnabled(env) && !isDecryptionKeyVarSet) {
+    result += `
+      <span>
+      ⚠️ <strong>${decryptionKeyVarName} </strong> optional environment variable is not set<br />
          <i>This environment variable is optional; your integration will work without the 'Open Client Response' feature. If you didn't set it intentionally, you can ignore this warning.</i>
       </span>
       `

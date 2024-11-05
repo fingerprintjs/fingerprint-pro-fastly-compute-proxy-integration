@@ -3,6 +3,7 @@ export type IntegrationEnv = {
   GET_RESULT_PATH: string | null
   PROXY_SECRET: string | null
   OPEN_CLIENT_RESPONSE_ENABLED: string | null
+  DECRYPTION_KEY: string | null
 }
 
 const Defaults: IntegrationEnv = {
@@ -10,10 +11,8 @@ const Defaults: IntegrationEnv = {
   GET_RESULT_PATH: 'result',
   PROXY_SECRET: null,
   OPEN_CLIENT_RESPONSE_ENABLED: 'false',
+  DECRYPTION_KEY: null,
 }
-
-export const FingerprintSecretStoreName = 'FingerprintSecrets'
-export const FingerprintDecryptionKeyName = 'decryptionKey'
 
 function getVarOrDefault(
   variable: keyof IntegrationEnv,
@@ -52,6 +51,10 @@ export const proxySecretVarName = 'PROXY_SECRET'
 const getProxySecretVar = getVarOrDefault(proxySecretVarName, Defaults)
 export const isProxySecretSet = isVarSet(proxySecretVarName)
 
+export const decryptionKeyVarName = 'DECRYPTION_KEY'
+const getDecryptionKeyVar = getVarOrDefault(decryptionKeyVarName, Defaults)
+export const isDecryptionKeySet = isVarSet(decryptionKeyVarName)
+
 export const openClientResponseVarName = 'OPEN_CLIENT_RESPONSE_ENABLED'
 export const isOpenClientResponseSet = isVarSet(openClientResponseVarName)
 
@@ -60,6 +63,10 @@ export const isOpenClientResponseEnabled = (env: IntegrationEnv) =>
 
 export function getProxySecret(env: IntegrationEnv): string | null {
   return getProxySecretVar(env)
+}
+
+export function getDecryptionKey(env: IntegrationEnv): string | null {
+  return getDecryptionKeyVar(env)
 }
 
 export function getStatusPagePath(): string {

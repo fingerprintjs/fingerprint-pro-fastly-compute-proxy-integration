@@ -34,7 +34,7 @@ async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv)
 
   const responseBody = await response.text()
 
-  processOpenClientResponse(responseBody, response).catch((e) =>
+  processOpenClientResponse(responseBody, response, env).catch((e) =>
     console.error('failed when processing open client response', e)
   )
 

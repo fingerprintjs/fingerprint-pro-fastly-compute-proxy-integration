@@ -23,7 +23,7 @@
     "@types/pako": "^2.0.3",
     "babel-jest": "^29.7.0",
     "esbuild": "^0.24.0",
-    "fastly": "7.3.0",
+    "fastly": "^7.10.0",
     "fs": "0.0.1-security",
     "husky": "^9.1.5",
     "jest": "^29.7.0",
