@@ -73,7 +73,7 @@ describe('Status Page', () => {
     const response = await handleRequest(request)
 
     const responseText = await response.text()
-    const isAllSet = responseText.includes('All required configurations are set')
+    const isAllSet = responseText.includes('All required configuration values are set')
     console.log(responseText)
 
     expect(isAllSet).toBe(true)

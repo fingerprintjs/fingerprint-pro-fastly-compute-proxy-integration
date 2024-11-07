@@ -100,12 +100,12 @@ function createEnvVarsInformationElement(env: IntegrationEnv): string {
   if (isAllVarsAvailable) {
     result += `
     <span>
-     ✅ All required configurations are set
+     ✅ All required configuration values are set
     </span>
     `
   }
 
-  result += `<span>Your integration’s configuration values</span>`
+  result += `<span>Your integration’s configuration values:</span>`
 
   for (const configuration of configurations) {
     result += `
