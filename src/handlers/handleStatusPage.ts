@@ -8,9 +8,9 @@ import {
   proxySecretVarName,
   isOpenClientResponseSet,
   openClientResponseVarName,
-  isDecryptionKeySet,
   decryptionKeyVarName,
   isOpenClientResponseEnabled,
+  isDecryptionKeySet,
 } from '../env'
 import packageJson from '../../package.json'
 
@@ -50,64 +50,69 @@ function createContactInformationElement(): string {
   `
 }
 
+type ConfigurationStatus = {
+  label: string
+  check: boolean
+  required: boolean
+  errorMessage?: string
+  warningMessage?: string
+  value?: string | null
+}
 function createEnvVarsInformationElement(env: IntegrationEnv): string {
-  const isScriptDownloadPathAvailable = isScriptDownloadPathSet(env)
-  const isGetResultPathAvailable = isGetResultPathSet(env)
-  const isProxySecretAvailable = isProxySecretSet(env)
-  const isOpenClientResponseVarSet = isOpenClientResponseSet(env)
-  const isDecryptionKeyVarSet = isDecryptionKeySet(env)
-  const isAllVarsAvailable = isScriptDownloadPathAvailable && isGetResultPathAvailable && isProxySecretAvailable
+  const incorrectConfigurationMessage = 'Your integration is not working correctly.'
+  const configurations: ConfigurationStatus[] = [
+    {
+      label: agentScriptDownloadPathVarName,
+      check: isScriptDownloadPathSet(env),
+      required: true,
+      errorMessage: incorrectConfigurationMessage,
+    },
+    {
+      label: getResultPathVarName,
+      check: isGetResultPathSet(env),
+      required: true,
+      errorMessage: incorrectConfigurationMessage,
+    },
+    {
+      label: proxySecretVarName,
+      check: isProxySecretSet(env),
+      required: true,
+      errorMessage: incorrectConfigurationMessage,
+    },
+    {
+      label: decryptionKeyVarName,
+      check: isDecryptionKeySet(env),
+      required: isOpenClientResponseEnabled(env),
+      errorMessage: incorrectConfigurationMessage,
+    },
+    {
+      label: openClientResponseVarName,
+      check: isOpenClientResponseSet(env),
+      required: false,
+      warningMessage:
+        "Your integration will work without the 'Open Client Response' feature. If you didn't set it intentionally, you can ignore this warning.",
+    },
+  ]
+
+  const isAllVarsAvailable = configurations.filter((t) => t.required && !t.check).length === 0
 
   let result = ''
-  if (!isAllVarsAvailable) {
+  if (isAllVarsAvailable) {
     result += `
     <span>
-    The following environment variables are not defined. Please reach out our support team.
-    </span>
-    `
-    if (!isScriptDownloadPathAvailable) {
-      result += `
-      <span>
-      ⚠️ <strong>${agentScriptDownloadPathVarName} </strong> is not set
-      </span>
-      `
-    }
-    if (!isGetResultPathAvailable) {
-      result += `
-      <span>
-      ⚠️ <strong>${getResultPathVarName} </strong> is not set
-      </span>
-      `
-    }
-    if (!isProxySecretAvailable) {
-      result += `
-      <span>
-      ⚠️ <strong>${proxySecretVarName} </strong> is not set
-      </span>
-      `
-    }
-  } else {
-    result += `
-    <span>
-     ✅ All required environment variables are set
+     ✅ All required configurations are set
     </span>
     `
   }
 
-  if (!isOpenClientResponseVarSet) {
-    result += `
-      <span>
-      ⚠️ <strong>${openClientResponseVarName} </strong> optional environment variable is not set<br />
-         <i>This environment variable is optional; your integration will work without the 'Open Client Response' feature. If you didn't set it intentionally, you can ignore this warning.</i>
-      </span>
-      `
-  }
+  result += `<span>Your integration’s configuration values</span>`
 
-  if (isOpenClientResponseEnabled(env) && !isDecryptionKeyVarSet) {
+  for (const configuration of configurations) {
     result += `
       <span>
-      ⚠️ <strong>${decryptionKeyVarName} </strong> optional environment variable is not set<br />
-         <i>This environment variable is optional; your integration will work without the 'Open Client Response' feature. If you didn't set it intentionally, you can ignore this warning.</i>
+      ${configuration.check ? '✅' : '⚠️'} <strong>${configuration.label} </strong> (${configuration.required ? 'REQUIRED' : 'OPTIONAL'}) is${!configuration.check ? ' not ' : ' '}set
+      ${configuration.required && !configuration.check && configuration.errorMessage ? `<span>${configuration.errorMessage}</span>` : ''}
+      ${!configuration.required && !configuration.check && configuration.warningMessage ? `<span>${configuration.warningMessage}</span>` : ''}
       </span>
       `
   }

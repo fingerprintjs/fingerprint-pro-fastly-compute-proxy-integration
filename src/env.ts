@@ -56,7 +56,8 @@ const getDecryptionKeyVar = getVarOrDefault(decryptionKeyVarName, Defaults)
 export const isDecryptionKeySet = isVarSet(decryptionKeyVarName)
 
 export const openClientResponseVarName = 'OPEN_CLIENT_RESPONSE_ENABLED'
-export const isOpenClientResponseSet = isVarSet(openClientResponseVarName)
+export const isOpenClientResponseSet = (env: IntegrationEnv) =>
+  env.OPEN_CLIENT_RESPONSE_ENABLED === 'true' || env.OPEN_CLIENT_RESPONSE_ENABLED === 'false'
 
 export const isOpenClientResponseEnabled = (env: IntegrationEnv) =>
   env[openClientResponseVarName]?.toLowerCase() === 'true'
