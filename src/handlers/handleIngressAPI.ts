@@ -32,13 +32,15 @@ async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv)
     return response
   }
 
-  const responseBody = await response.text()
+  if (response.status >= 200 && response.status < 300) {
+    const responseBody = await response.text()
+    processOpenClientResponse(responseBody, response, env).catch((e) =>
+      console.error('failed when processing open client response', e)
+    )
+    return cloneFastlyResponse(responseBody, response)
+  }
 
-  processOpenClientResponse(responseBody, response, env).catch((e) =>
-    console.error('failed when processing open client response', e)
-  )
-
-  return cloneFastlyResponse(responseBody, response)
+  return response
 }
 
 function makeCacheEndpointRequest(receivedRequest: Request, routeMatches: RegExpMatchArray | undefined) {
