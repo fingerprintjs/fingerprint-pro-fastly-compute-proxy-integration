@@ -16,5 +16,6 @@ export async function saveFingerprintResultToKVStore(context: ProcessOpenClientR
     const serviceId = env('FASTLY_SERVICE_ID')
     const store = new KVStore(`Fingerprint_Results_${serviceId}`)
     await store.put(requestId, JSON.stringify(context.event))
+    console.log('VPN Confidence', context.event?.products.vpn?.data?.confidence)
   }
 }
