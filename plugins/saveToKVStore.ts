@@ -3,6 +3,7 @@
 import { KVStore } from 'fastly:kv-store'
 import { ProcessOpenClientResponseContext } from '../src/utils/registerPlugin'
 import { getConfigStore } from '../src/utils/getStore'
+import { env } from 'fastly:env'
 export async function saveFingerprintResultToKVStore(context: ProcessOpenClientResponseContext) {
   const configStore = getConfigStore()
   const isPluginEnabled = configStore?.get('SAVE_TO_KV_STORE_PLUGIN_ENABLED') === 'true'
@@ -12,7 +13,8 @@ export async function saveFingerprintResultToKVStore(context: ProcessOpenClientR
     if (!requestId) {
       return
     }
-    const store = new KVStore('FingerprintResults')
+    const serviceId = env('FASTLY_SERVICE_ID')
+    const store = new KVStore(`Fingerprint_Results_${serviceId}`)
     await store.put(requestId, JSON.stringify(context.event))
   }
 }
