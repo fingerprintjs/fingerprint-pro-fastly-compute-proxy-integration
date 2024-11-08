@@ -8,12 +8,10 @@ import {
   openClientResponseVarName,
   proxySecretVarName,
 } from './env'
-import { ConfigStore } from 'fastly:config-store'
 import { returnHttpResponse } from './utils/returnHttpResponse'
 import { createFallbackErrorResponse } from './utils'
 import { setClientIp } from './utils/clientIp'
-import { env } from 'fastly:env'
-import { SecretStore } from 'fastly:secret-store'
+import { getConfigStore, getSecretStore } from './utils/getStore'
 
 addEventListener('fetch', (event) => event.respondWith(handleRequest(event)))
 
@@ -30,15 +28,11 @@ export async function handleRequest(event: FetchEvent): Promise<Response> {
 }
 
 async function getEnvObject(): Promise<IntegrationEnv> {
-  const serviceId = env('FASTLY_SERVICE_ID')
-  const storeNamePrefix = process.env.STORE_NAME_PREFIX
-  const configStoreName = `${storeNamePrefix}_ConfigStore_${serviceId}`
-  const secretStoreName = `${storeNamePrefix}_SecretStore_${serviceId}`
   let configStore
   let secretStore
   try {
-    configStore = new ConfigStore(configStoreName)
-    secretStore = new SecretStore(secretStoreName)
+    configStore = getConfigStore()
+    secretStore = getSecretStore()
   } catch (e) {
     console.error(e)
   }
