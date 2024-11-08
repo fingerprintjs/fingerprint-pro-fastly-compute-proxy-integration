@@ -1,11 +1,15 @@
 const store = new Map()
-export class ConfigStore {
+export class SecretStore {
   constructor(storeName) {
     this.storeName = storeName
   }
 
-  get(key) {
-    return store.get(key) || null
+  async get(key) {
+    return {
+      plaintext: () => {
+        return store.get(key) || null
+      },
+    }
   }
 
   set(key, value) {

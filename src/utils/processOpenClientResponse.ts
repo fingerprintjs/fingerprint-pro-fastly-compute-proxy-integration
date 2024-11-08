@@ -1,20 +1,18 @@
 import { plugins } from './registerPlugin'
 import { unsealData } from './unsealData'
-import { SecretStore } from 'fastly:secret-store'
-import { FingerprintDecryptionKeyName, FingerprintSecretStoreName } from '../env'
 import { cloneFastlyResponse } from './cloneFastlyResponse'
+import { getDecryptionKey, IntegrationEnv } from '../env'
 
 type FingerprintSealedIngressResponseBody = {
   sealedResult: string
 }
 
-async function getDecryptionKey() {
-  const secretStore = new SecretStore(FingerprintSecretStoreName)
-  return secretStore.get(FingerprintDecryptionKeyName).then((v) => v?.plaintext())
-}
-
-export async function processOpenClientResponse(body: string | undefined, response: Response): Promise<void> {
-  const decryptionKey = await getDecryptionKey()
+export async function processOpenClientResponse(
+  body: string | undefined,
+  response: Response,
+  env: IntegrationEnv
+): Promise<void> {
+  const decryptionKey = getDecryptionKey(env)
   if (!decryptionKey) {
     throw new Error('Decryption key not found in secret store')
   }

@@ -1,11 +1,19 @@
 /// <reference types="@fastly/js-compute" />
 import { handleReq } from './handler'
-import { IntegrationEnv } from './env'
+import {
+  agentScriptDownloadPathVarName,
+  decryptionKeyVarName,
+  getResultPathVarName,
+  IntegrationEnv,
+  openClientResponseVarName,
+  proxySecretVarName,
+} from './env'
 import { ConfigStore } from 'fastly:config-store'
 import { returnHttpResponse } from './utils/returnHttpResponse'
 import { createFallbackErrorResponse } from './utils'
 import { setClientIp } from './utils/clientIp'
 import { env } from 'fastly:env'
+import { SecretStore } from 'fastly:secret-store'
 
 addEventListener('fetch', (event) => event.respondWith(handleRequest(event)))
 
@@ -13,7 +21,7 @@ export async function handleRequest(event: FetchEvent): Promise<Response> {
   setClientIp(event.client.address)
   try {
     const request = event.request
-    const envObj = getEnvObject()
+    const envObj = await getEnvObject()
     return handleReq(request, envObj).then(returnHttpResponse)
   } catch (e) {
     console.error(e)
@@ -21,29 +29,25 @@ export async function handleRequest(event: FetchEvent): Promise<Response> {
   }
 }
 
-function getEnvObject(): IntegrationEnv {
+async function getEnvObject(): Promise<IntegrationEnv> {
   const serviceId = env('FASTLY_SERVICE_ID')
-  const configStoreNamePrefix = process.env.CONFIG_STORE_NAME_PREFIX
-  let config
+  const storeNamePrefix = process.env.STORE_NAME_PREFIX
+  const configStoreName = `${storeNamePrefix}_ConfigStore_${serviceId}`
+  const secretStoreName = `${storeNamePrefix}_SecretStore_${serviceId}`
+  let configStore
+  let secretStore
   try {
-    config = new ConfigStore(`${configStoreNamePrefix}_${serviceId}`)
+    configStore = new ConfigStore(configStoreName)
+    secretStore = new SecretStore(secretStoreName)
   } catch (e) {
     console.error(e)
   }
 
-  if (config == null) {
-    return {
-      AGENT_SCRIPT_DOWNLOAD_PATH: null,
-      GET_RESULT_PATH: null,
-      PROXY_SECRET: null,
-      OPEN_CLIENT_RESPONSE_ENABLED: 'false',
-    }
-  }
-
   return {
-    AGENT_SCRIPT_DOWNLOAD_PATH: config.get('AGENT_SCRIPT_DOWNLOAD_PATH'),
-    GET_RESULT_PATH: config.get('GET_RESULT_PATH'),
-    PROXY_SECRET: config.get('PROXY_SECRET'),
-    OPEN_CLIENT_RESPONSE_ENABLED: config.get('OPEN_CLIENT_RESPONSE_ENABLED'),
+    AGENT_SCRIPT_DOWNLOAD_PATH: configStore?.get(agentScriptDownloadPathVarName) ?? null,
+    GET_RESULT_PATH: configStore?.get(getResultPathVarName) ?? null,
+    OPEN_CLIENT_RESPONSE_ENABLED: configStore?.get(openClientResponseVarName) ?? null,
+    PROXY_SECRET: (await secretStore?.get(proxySecretVarName))?.plaintext() ?? null,
+    DECRYPTION_KEY: (await secretStore?.get(decryptionKeyVarName))?.plaintext() ?? null,
   }
 }
