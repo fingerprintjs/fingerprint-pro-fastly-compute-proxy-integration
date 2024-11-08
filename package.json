@@ -12,7 +12,6 @@
     "@fingerprintjs/commit-lint-dx-team": "^0.1.0",
     "@fingerprintjs/conventional-changelog-dx-team": "^0.1.0",
     "@fingerprintjs/eslint-config-dx-team": "^0.1.0",
-    "@fingerprintjs/fingerprintjs-pro-server-api": "^5.0.0",
     "@fingerprintjs/prettier-config-dx-team": "^0.2.0",
     "@fingerprintjs/tsconfig-dx-team": "^0.0.2",
     "@jest/globals": "^29.7.0",
@@ -62,5 +61,8 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "peerDependencies": {
+    "@fingerprintjs/fingerprintjs-pro-server-api": "^5.2.0"
   }
 }
