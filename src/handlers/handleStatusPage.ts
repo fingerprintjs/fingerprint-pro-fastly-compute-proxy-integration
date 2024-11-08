@@ -52,10 +52,9 @@ function createContactInformationElement(): string {
 
 type ConfigurationStatus = {
   label: string
-  check: boolean
+  isSet: boolean
   required: boolean
-  errorMessage?: string
-  warningMessage?: string
+  message?: string
   value?: string | null
 }
 function createEnvVarsInformationElement(env: IntegrationEnv): string {
@@ -63,38 +62,38 @@ function createEnvVarsInformationElement(env: IntegrationEnv): string {
   const configurations: ConfigurationStatus[] = [
     {
       label: agentScriptDownloadPathVarName,
-      check: isScriptDownloadPathSet(env),
+      isSet: isScriptDownloadPathSet(env),
       required: true,
-      errorMessage: incorrectConfigurationMessage,
+      message: incorrectConfigurationMessage,
     },
     {
       label: getResultPathVarName,
-      check: isGetResultPathSet(env),
+      isSet: isGetResultPathSet(env),
       required: true,
-      errorMessage: incorrectConfigurationMessage,
+      message: incorrectConfigurationMessage,
     },
     {
       label: proxySecretVarName,
-      check: isProxySecretSet(env),
+      isSet: isProxySecretSet(env),
       required: true,
-      errorMessage: incorrectConfigurationMessage,
+      message: incorrectConfigurationMessage,
     },
     {
       label: decryptionKeyVarName,
-      check: isDecryptionKeySet(env),
+      isSet: isDecryptionKeySet(env),
       required: isOpenClientResponseEnabled(env),
-      errorMessage: incorrectConfigurationMessage,
+      message: incorrectConfigurationMessage,
     },
     {
       label: openClientResponseVarName,
-      check: isOpenClientResponseSet(env),
+      isSet: isOpenClientResponseSet(env),
       required: false,
       warningMessage:
         "Your integration will work without the 'Open Client Response' feature. If you didn't set it intentionally, you can ignore this warning.",
     },
   ]
 
-  const isAllVarsAvailable = configurations.filter((t) => t.required && !t.check).length === 0
+  const isAllVarsAvailable = configurations.filter((t) => t.required && !t.isSet).length === 0
 
   let result = ''
   if (isAllVarsAvailable) {
@@ -110,9 +109,8 @@ function createEnvVarsInformationElement(env: IntegrationEnv): string {
   for (const configuration of configurations) {
     result += `
       <span>
-      ${configuration.check ? '✅' : '⚠️'} <strong>${configuration.label} </strong> (${configuration.required ? 'REQUIRED' : 'OPTIONAL'}) is${!configuration.check ? ' not ' : ' '}set
-      ${configuration.required && !configuration.check && configuration.errorMessage ? `<span>${configuration.errorMessage}</span>` : ''}
-      ${!configuration.required && !configuration.check && configuration.warningMessage ? `<span>${configuration.warningMessage}</span>` : ''}
+      ${configuration.isSet ? '✅' : '⚠️'} <strong>${configuration.label} </strong> (${configuration.required ? 'REQUIRED' : 'OPTIONAL'}) is${!configuration.isSet ? ' not ' : ' '}set
+      ${!configuration.isSet && configuration.message ? `<span>${configuration.message}</span>` : ''}
       </span>
       `
   }
