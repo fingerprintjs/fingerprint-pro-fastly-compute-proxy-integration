@@ -93,7 +93,7 @@ async function linkStoreResource(
 
 async function createSecretStore(service_id: string) {
   console.log('Creating secret store')
-  const secretStoreNameWithPrefix = `${STORE_NAME_PREFIX}_SecretStore_${service_id}`
+  const secretStoreNameWithPrefix = `${STORE_NAME_PREFIX}_Secret_Store_${service_id}`
   const secretStoreClient = createClient('secretStore')
   const secretStoreItemClient = createClient('secretStoreItem')
   let secretStore
@@ -122,7 +122,7 @@ async function createSecretStore(service_id: string) {
 
 async function createConfigStore(service_id: string) {
   console.log('Creating config store')
-  const configStoreNameWithPrefix = `${STORE_NAME_PREFIX}_ConfigStore_${service_id}`
+  const configStoreNameWithPrefix = `${STORE_NAME_PREFIX}_Config_Store_${service_id}`
   const configStoreClient = createClient('configStore')
   const configStoreItemClient = createClient('configStoreItem')
   let configStore
