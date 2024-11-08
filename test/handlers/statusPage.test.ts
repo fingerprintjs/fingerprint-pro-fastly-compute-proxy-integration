@@ -61,7 +61,7 @@ describe('Status Page', () => {
     // @ts-ignore
     config.set('GET_RESULT_PATH', 'result')
     // @ts-ignore
-    config.set('OPEN_CLIENT_RESPONSE_ENABLED', 'true')
+    config.set('OPEN_CLIENT_RESPONSE_PLUGINS_ENABLED', 'true')
 
     const secretStore = new SecretStore('Fingerprint')
     // @ts-ignore

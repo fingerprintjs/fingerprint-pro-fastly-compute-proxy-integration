@@ -46,7 +46,7 @@ async function getEnvObject(): Promise<IntegrationEnv> {
   return {
     AGENT_SCRIPT_DOWNLOAD_PATH: configStore?.get(agentScriptDownloadPathVarName) ?? null,
     GET_RESULT_PATH: configStore?.get(getResultPathVarName) ?? null,
-    OPEN_CLIENT_RESPONSE_ENABLED: configStore?.get(openClientResponseVarName) ?? null,
+    OPEN_CLIENT_RESPONSE_PLUGINS_ENABLED: configStore?.get(openClientResponseVarName) ?? null,
     PROXY_SECRET: (await secretStore?.get(proxySecretVarName))?.plaintext() ?? null,
     DECRYPTION_KEY: (await secretStore?.get(decryptionKeyVarName))?.plaintext() ?? null,
   }

@@ -147,7 +147,7 @@ async function createConfigStore(service_id: string) {
   })
   await configStoreItemClient.createConfigStoreItem({
     config_store_id: configStore.id,
-    item_key: 'OPEN_CLIENT_RESPONSE_ENABLED',
+    item_key: 'OPEN_CLIENT_RESPONSE_PLUGINS_ENABLED',
     item_value: 'false',
   })
 
