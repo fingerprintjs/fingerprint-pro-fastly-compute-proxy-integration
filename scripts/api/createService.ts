@@ -82,7 +82,7 @@ async function linkStoreResource(
   resource_id: string,
   type: 'secret' | 'config' = 'config'
 ) {
-  const storeNameWithPrefix = `${STORE_NAME_PREFIX}_${type === 'config' ? 'ConfigStore' : 'SecretStore'}_${service_id}`
+  const storeNameWithPrefix = `${STORE_NAME_PREFIX}_${type === 'config' ? 'Config_Store' : 'Secret_Store'}_${service_id}`
   return createClient('resource').createResource({
     service_id,
     version_id,
