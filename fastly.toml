@@ -6,7 +6,7 @@ cloned_from = "https://github.com/fastly/compute-starter-kit-typescript"
 description = "Fingerprint Proxy Fastly Compute Package"
 language = "javascript"
 manifest_version = 3
-name = "fingerprint-pro-fastly-proxy-integration"
+name = "fingerprint-fastly-compute-proxy-integration"
 service_id = ""
 
 [scripts]

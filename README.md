@@ -84,7 +84,7 @@ To use a custom name prefix for both stores, use the `STORE_NAME_PREFIX` environ
 STORE_NAME_PREFIX=CustomName pnpm run build
 ```
 
-Your custom built package in `pkg/package.tar.gz` will use your custom prefix in store names like:
+Your custom built package in `pkg/fingerprint-fastly-compute-proxy-integration.tar.gz` will use your custom prefix in store names like:
 
 * `CustomName_Config_Store_<SERVICE_ID>`
 * `CustomName_Secret_Store_<SERVICE_ID>`
