@@ -88,7 +88,7 @@ function createEnvVarsInformationElement(env: IntegrationEnv): string {
       label: openClientResponseVarName,
       isSet: isOpenClientResponseSet(env),
       required: false,
-      warningMessage:
+      message:
         "Your integration will work without the 'Open Client Response' feature. If you didn't set it intentionally, you can ignore this warning.",
     },
   ]

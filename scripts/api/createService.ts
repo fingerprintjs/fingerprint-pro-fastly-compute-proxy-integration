@@ -82,7 +82,7 @@ async function linkStoreResource(
   resource_id: string,
   type: 'secret' | 'config' = 'config'
 ) {
-  const storeNameWithPrefix = `${STORE_NAME_PREFIX}_${type === 'config' ? 'ConfigStore' : 'SecretStore'}_${service_id}`
+  const storeNameWithPrefix = `${STORE_NAME_PREFIX}_${type === 'config' ? 'Config_Store' : 'Secret_Store'}_${service_id}`
   return createClient('resource').createResource({
     service_id,
     version_id,
@@ -93,7 +93,7 @@ async function linkStoreResource(
 
 async function createSecretStore(service_id: string) {
   console.log('Creating secret store')
-  const secretStoreNameWithPrefix = `${STORE_NAME_PREFIX}_SecretStore_${service_id}`
+  const secretStoreNameWithPrefix = `${STORE_NAME_PREFIX}_Secret_Store_${service_id}`
   const secretStoreClient = createClient('secretStore')
   const secretStoreItemClient = createClient('secretStoreItem')
   let secretStore
@@ -122,7 +122,7 @@ async function createSecretStore(service_id: string) {
 
 async function createConfigStore(service_id: string) {
   console.log('Creating config store')
-  const configStoreNameWithPrefix = `${STORE_NAME_PREFIX}_ConfigStore_${service_id}`
+  const configStoreNameWithPrefix = `${STORE_NAME_PREFIX}_Config_Store_${service_id}`
   const configStoreClient = createClient('configStore')
   const configStoreItemClient = createClient('configStoreItem')
   let configStore
@@ -147,7 +147,7 @@ async function createConfigStore(service_id: string) {
   })
   await configStoreItemClient.createConfigStoreItem({
     config_store_id: configStore.id,
-    item_key: 'OPEN_CLIENT_RESPONSE_ENABLED',
+    item_key: 'OPEN_CLIENT_RESPONSE_PLUGINS_ENABLED',
     item_value: 'false',
   })
 

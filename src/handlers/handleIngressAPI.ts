@@ -29,16 +29,22 @@ async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv)
   const response = await fetch(request, { backend: getIngressBackendByRegion(url) })
 
   if (!isOpenClientResponseEnabled(env)) {
+    console.log(
+      "Open client response plugings are disabled. Set OPEN_CLIENT_RESPONSE_PLUGINS_ENABLED to `true` in your proxy integration's Config store to enable them."
+    )
     return response
   }
 
-  const responseBody = await response.text()
+  console.log('Plugin system for Open Client Response is enabled')
+  if (response.status >= 200 && response.status < 300) {
+    const responseBody = await response.text()
+    processOpenClientResponse(responseBody, response, env).catch((e) =>
+      console.error('Processing open client response failed: ', e)
+    )
+    return cloneFastlyResponse(responseBody, response)
+  }
 
-  processOpenClientResponse(responseBody, response, env).catch((e) =>
-    console.error('failed when processing open client response', e)
-  )
-
-  return cloneFastlyResponse(responseBody, response)
+  return response
 }
 
 function makeCacheEndpointRequest(receivedRequest: Request, routeMatches: RegExpMatchArray | undefined) {

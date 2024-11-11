@@ -1,7 +1,7 @@
 import { build } from 'esbuild'
 
 // Load environment variables from process.env
-const configStoreNamePrefix = process.env.STORE_NAME_PREFIX || 'Fingerprint_Fastly_Compute_Proxy_Integration'
+const configStoreNamePrefix = process.env.STORE_NAME_PREFIX || 'Fingerprint_Compute'
 
 build({
   entryPoints: ['./src/index.ts'],

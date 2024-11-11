@@ -11,6 +11,9 @@ importers:
       '@fastly/js-compute':
         specifier: ^3.21.4
         version: 3.25.0
+      '@fingerprintjs/fingerprintjs-pro-server-api':
+        specifier: ^5.2.0
+        version: 5.2.0
       cookie:
         specifier: 0.7.0
         version: 0.7.0
@@ -36,9 +39,6 @@ importers:
       '@fingerprintjs/eslint-config-dx-team':
         specifier: ^0.1.0
         version: 0.1.0(prettier@3.2.4)(typescript@5.3.3)
-      '@fingerprintjs/fingerprintjs-pro-server-api':
-        specifier: ^5.0.0
-        version: 5.1.0
       '@fingerprintjs/prettier-config-dx-team':
         specifier: ^0.2.0
         version: 0.2.0
@@ -1002,8 +1002,8 @@ packages:
     peerDependencies:
       prettier: '>=3'
 
-  '@fingerprintjs/fingerprintjs-pro-server-api@5.1.0':
-    resolution: {integrity: sha512-lB9Iz+v8xccQlyQa8fsLb2F/fQ4ti1iegs+BvTMND6XBsawFcG2+HzdZwmb87Dg7EHf6Ez+vDvNElzjVV+Qmwg==}
+  '@fingerprintjs/fingerprintjs-pro-server-api@5.2.0':
+    resolution: {integrity: sha512-o53t3fVO2sC3h3WFxniu9Pw3QZYCXnkSz4vOZLzh9YtiyWf3JGV8ejN7YEnwHWM+k6uMjVhqHOpDpOXIsCEHfA==}
     engines: {node: '>=18.17.0'}
 
   '@fingerprintjs/prettier-config-dx-team@0.2.0':
@@ -4221,7 +4221,7 @@ snapshots:
       - supports-color
       - typescript
 
-  '@fingerprintjs/fingerprintjs-pro-server-api@5.1.0': {}
+  '@fingerprintjs/fingerprintjs-pro-server-api@5.2.0': {}
 
   '@fingerprintjs/prettier-config-dx-team@0.2.0':
     dependencies:
