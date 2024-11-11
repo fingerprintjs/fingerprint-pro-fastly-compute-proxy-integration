@@ -37,7 +37,7 @@ async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv)
   if (response.status >= 200 && response.status < 300) {
     const responseBody = await response.text()
     processOpenClientResponse(responseBody, response, env).catch((e) =>
-      console.error('failed when processing open client response', e)
+      console.error('Processing open client response failed: ', e)
     )
     return cloneFastlyResponse(responseBody, response)
   }
