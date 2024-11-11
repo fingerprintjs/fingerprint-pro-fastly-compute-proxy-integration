@@ -12,10 +12,3 @@ service_id = ""
 [scripts]
   build = "pnpm build"
   post_init = "pnpm install"
-
-#[local_server]
-#  [local_server.backends]
-#    [local_server.backends.fpcdn]
-#      url = "http://localhost:1234"
-#    [local_server.backends.fpjs]
-#      url = "http://localhost:1234"
