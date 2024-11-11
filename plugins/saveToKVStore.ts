@@ -9,7 +9,7 @@ export async function saveFingerprintResultToKVStore(context: ProcessOpenClientR
   const configStore = getConfigStore()
   const isPluginEnabled = configStore?.get('SAVE_TO_KV_STORE_PLUGIN_ENABLED') === 'true'
 
-  await waitForMs(10000, () => console.log('Hello from the plugin saveFingerprintResultToKVStore!'))
+  await waitForMs(25, () => console.log('Hello from the plugin saveFingerprintResultToKVStore!', Date.now()))
 
   if (!isPluginEnabled) {
     console.log("Plugin 'saveFingerprintResultToKVStore' is not enabled")

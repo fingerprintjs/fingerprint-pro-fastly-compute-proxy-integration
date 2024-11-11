@@ -13,7 +13,7 @@ export async function processOpenClientResponse(
   response: Response,
   env: IntegrationEnv
 ): Promise<void> {
-  await waitForMs(10000, () => console.log('Hello from the plugin MANAGER!'))
+  await waitForMs(25, () => console.log('Hello from the plugin MANAGER!', Date.now()))
   const decryptionKey = getDecryptionKey(env)
   if (!decryptionKey) {
     throw new Error('Decryption key not found in secret store')
