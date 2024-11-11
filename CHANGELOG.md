@@ -1,3 +1,12 @@
+## [0.2.0](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/compare/v0.1.0...v0.2.0) (2024-11-11)
+
+
+### Features
+
+* add prefix to config store name ([3838318](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/commit/38383186439c5b1f7362b7462ea1a578287a59e3))
+* move proxy secret to secret store ([b943878](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/commit/b94387882bd4d485733faa6cc712ee6e298d6e58))
+* show all configurations on status page ([e996354](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/commit/e9963545ae6be1fa44e2fa41ef74306067e6a75e))
+
 ## [0.2.0-rc.2](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/compare/v0.2.0-rc.1...v0.2.0-rc.2) (2024-11-08)
 
 
