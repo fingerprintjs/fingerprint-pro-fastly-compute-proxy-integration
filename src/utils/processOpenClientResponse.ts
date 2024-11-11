@@ -2,7 +2,6 @@ import { plugins } from './registerPlugin'
 import { unsealData } from './unsealData'
 import { cloneFastlyResponse } from './cloneFastlyResponse'
 import { getDecryptionKey, IntegrationEnv } from '../env'
-import { waitForMs } from './waitForMs'
 
 type FingerprintSealedIngressResponseBody = {
   sealedResult: string
@@ -13,7 +12,7 @@ export async function processOpenClientResponse(
   response: Response,
   env: IntegrationEnv
 ): Promise<void> {
-  await waitForMs(25, () => console.log('Hello from the plugin MANAGER!', Date.now()))
+  console.log('Hello from the plugin MANAGER!', Date.now())
   const decryptionKey = getDecryptionKey(env)
   if (!decryptionKey) {
     throw new Error('Decryption key not found in secret store')
