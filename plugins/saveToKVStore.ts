@@ -15,7 +15,7 @@ export async function saveFingerprintResultToKVStore(context: ProcessOpenClientR
 
   const requestId = context.event?.products.identification?.data?.requestId
   if (!requestId) {
-    console.log('[saveFingerprintResultToKVStore]Plugin Error: request ID is undefined in the event response')
+    console.log('[saveFingerprintResultToKVStore] Plugin Error: request ID is undefined in the event response.')
     return
   }
   const serviceId = env('FASTLY_SERVICE_ID')
