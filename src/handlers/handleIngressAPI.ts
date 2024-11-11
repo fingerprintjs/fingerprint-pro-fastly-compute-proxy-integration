@@ -29,7 +29,7 @@ async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv)
   const response = await fetch(request, { backend: getIngressBackendByRegion(url) })
 
   if (!isOpenClientResponseEnabled(env)) {
-    console.log('Plugin system for Open Client Response is disabled')
+    console.log('Open client response plugings are disabled. Set OPEN_CLIENT_RESPONSE_PLUGINS_ENABLED to `true` in your proxy integration's Config store to enable them.')
     return response
   }
 
