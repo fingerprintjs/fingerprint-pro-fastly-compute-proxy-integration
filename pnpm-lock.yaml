@@ -11,6 +11,9 @@ importers:
       '@fastly/js-compute':
         specifier: ^3.21.4
         version: 3.25.0
+      '@fingerprintjs/fingerprintjs-pro-server-api':
+        specifier: ^5.2.0
+        version: 5.2.0
       cookie:
         specifier: 0.7.0
         version: 0.7.0
@@ -36,9 +39,6 @@ importers:
       '@fingerprintjs/eslint-config-dx-team':
         specifier: ^0.1.0
         version: 0.1.0(prettier@3.2.4)(typescript@5.3.3)
-      '@fingerprintjs/fingerprintjs-pro-server-api':
-        specifier: ^5.0.0
-        version: 5.1.0
       '@fingerprintjs/prettier-config-dx-team':
         specifier: ^0.2.0
         version: 0.2.0
@@ -70,8 +70,8 @@ importers:
         specifier: ^0.24.0
         version: 0.24.0
       fastly:
-        specifier: 7.3.0
-        version: 7.3.0
+        specifier: ^7.10.0
+        version: 7.10.0
       fs:
         specifier: 0.0.1-security
         version: 0.0.1-security
@@ -1002,8 +1002,8 @@ packages:
     peerDependencies:
       prettier: '>=3'
 
-  '@fingerprintjs/fingerprintjs-pro-server-api@5.1.0':
-    resolution: {integrity: sha512-lB9Iz+v8xccQlyQa8fsLb2F/fQ4ti1iegs+BvTMND6XBsawFcG2+HzdZwmb87Dg7EHf6Ez+vDvNElzjVV+Qmwg==}
+  '@fingerprintjs/fingerprintjs-pro-server-api@5.2.0':
+    resolution: {integrity: sha512-o53t3fVO2sC3h3WFxniu9Pw3QZYCXnkSz4vOZLzh9YtiyWf3JGV8ejN7YEnwHWM+k6uMjVhqHOpDpOXIsCEHfA==}
     engines: {node: '>=18.17.0'}
 
   '@fingerprintjs/prettier-config-dx-team@0.2.0':
@@ -1314,6 +1314,9 @@ packages:
   '@types/node@22.7.9':
     resolution: {integrity: sha512-jrTfRC7FM6nChvU7X2KqcrgquofrWLFDeYC1hKfwNWomVvrn7JIksqf344WN2X/y8xrgqBd2dJATZV4GbatBfg==}
 
+  '@types/node@22.9.0':
+    resolution: {integrity: sha512-vuyHg81vvWA1Z1ELfvLko2c8f34gyA0zaic0+Rllc5lbCnbSyuvb2Oxpm6TAUAC/2xZN3QGqxBNggD1nNR2AfQ==}
+
   '@types/pako@2.0.3':
     resolution: {integrity: sha512-bq0hMV9opAcrmE0Byyo0fY3Ew4tgOevJmQ9grUhpXQhYfyLJ1Kqg3P33JT5fdbT2AjeAjR51zqqVjAL/HMkx7Q==}
 
@@ -1457,6 +1460,11 @@ packages:
 
   acorn@8.13.0:
     resolution: {integrity: sha512-8zSiw54Oxrdym50NlZ9sUusyO1Z1ZchgRLWRaK6c86XJFClyCgFKetdowBg5bKxyp/u+CDBJG4Mpp0m3HLZl9w==}
+    engines: {node: '>=0.4.0'}
+    hasBin: true
+
+  acorn@8.14.0:
+    resolution: {integrity: sha512-cl669nCJTZBsL97OF4kUQm5g5hC2uihk0NxY3WENAC0TYdILVkAyHymAntgxGkl7K+t0cXIrH5siy5S4XkFycA==}
     engines: {node: '>=0.4.0'}
     hasBin: true
 
@@ -1986,8 +1994,8 @@ packages:
   fast-safe-stringify@2.1.1:
     resolution: {integrity: sha512-W+KJc2dmILlPplD/H4K9l9LcAHAfPtP6BY84uVLXQ6Evcz9Lcg33Y2z1IVblT6xdY54PXYVHEv+0Wpq8Io6zkA==}
 
-  fastly@7.3.0:
-    resolution: {integrity: sha512-drYeTPEruVWHMTKn6e2s4pSf09MLYKYkKDqZHyOpbzIMadt8y93Kvi3u/fdLS8EuQA5j81ChxY0C03ozWLK29g==}
+  fastly@7.10.0:
+    resolution: {integrity: sha512-aLN6iVCe3AUwURrvGtv88UJt5HMnApHq5Wan77w5OD91SF84U4/q8oJ8rVk3I5y/zyhRdkW+hGyBjwFFgJtyFA==}
 
   fastq@1.17.1:
     resolution: {integrity: sha512-sRVD3lWVIXWg6By68ZN7vho9a1pQcN/WBFaAAsDDFzlJjvoGx0P8z7V1t72grFJfJhu3YPZBuu25f7Kaw2jN1w==}
@@ -4213,7 +4221,7 @@ snapshots:
       - supports-color
       - typescript
 
-  '@fingerprintjs/fingerprintjs-pro-server-api@5.1.0': {}
+  '@fingerprintjs/fingerprintjs-pro-server-api@5.2.0': {}
 
   '@fingerprintjs/prettier-config-dx-team@0.2.0':
     dependencies:
@@ -4601,6 +4609,10 @@ snapshots:
     dependencies:
       undici-types: 6.19.8
 
+  '@types/node@22.9.0':
+    dependencies:
+      undici-types: 6.19.8
+
   '@types/pako@2.0.3': {}
 
   '@types/semver@7.5.8': {}
@@ -4781,9 +4793,9 @@ snapshots:
 
   '@xtuc/long@4.2.2': {}
 
-  acorn-import-attributes@1.9.5(acorn@8.13.0):
+  acorn-import-attributes@1.9.5(acorn@8.14.0):
     dependencies:
-      acorn: 8.13.0
+      acorn: 8.14.0
 
   acorn-jsx@5.3.2(acorn@8.13.0):
     dependencies:
@@ -4794,6 +4806,8 @@ snapshots:
       acorn: 8.13.0
 
   acorn@8.13.0: {}
+
+  acorn@8.14.0: {}
 
   ajv-keywords@3.5.2(ajv@6.12.6):
     dependencies:
@@ -5384,7 +5398,7 @@ snapshots:
 
   fast-safe-stringify@2.1.1: {}
 
-  fastly@7.3.0:
+  fastly@7.10.0:
     dependencies:
       superagent: 6.1.0
     transitivePeerDependencies:
@@ -5947,7 +5961,7 @@ snapshots:
 
   jest-worker@27.5.1:
     dependencies:
-      '@types/node': 22.7.9
+      '@types/node': 22.9.0
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
@@ -6649,8 +6663,8 @@ snapshots:
       '@webassemblyjs/ast': 1.12.1
       '@webassemblyjs/wasm-edit': 1.12.1
       '@webassemblyjs/wasm-parser': 1.12.1
-      acorn: 8.13.0
-      acorn-import-attributes: 1.9.5(acorn@8.13.0)
+      acorn: 8.14.0
+      acorn-import-attributes: 1.9.5(acorn@8.14.0)
       browserslist: 4.24.2
       chrome-trace-event: 1.0.4
       enhanced-resolve: 5.17.1

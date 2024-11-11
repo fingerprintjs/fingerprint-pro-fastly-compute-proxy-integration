@@ -8,6 +8,9 @@ import {
   proxySecretVarName,
   isOpenClientResponseSet,
   openClientResponseVarName,
+  decryptionKeyVarName,
+  isOpenClientResponseEnabled,
+  isDecryptionKeySet,
 } from '../env'
 import packageJson from '../../package.json'
 
@@ -47,54 +50,67 @@ function createContactInformationElement(): string {
   `
 }
 
+type ConfigurationStatus = {
+  label: string
+  isSet: boolean
+  required: boolean
+  message?: string
+  value?: string | null
+}
 function createEnvVarsInformationElement(env: IntegrationEnv): string {
-  const isScriptDownloadPathAvailable = isScriptDownloadPathSet(env)
-  const isGetResultPathAvailable = isGetResultPathSet(env)
-  const isProxySecretAvailable = isProxySecretSet(env)
-  const isOpenClientResponseVarSet = isOpenClientResponseSet(env)
-  const isAllVarsAvailable = isScriptDownloadPathAvailable && isGetResultPathAvailable && isProxySecretAvailable
+  const incorrectConfigurationMessage = 'Your integration is not working correctly.'
+  const configurations: ConfigurationStatus[] = [
+    {
+      label: agentScriptDownloadPathVarName,
+      isSet: isScriptDownloadPathSet(env),
+      required: true,
+      message: incorrectConfigurationMessage,
+    },
+    {
+      label: getResultPathVarName,
+      isSet: isGetResultPathSet(env),
+      required: true,
+      message: incorrectConfigurationMessage,
+    },
+    {
+      label: proxySecretVarName,
+      isSet: isProxySecretSet(env),
+      required: true,
+      message: incorrectConfigurationMessage,
+    },
+    {
+      label: decryptionKeyVarName,
+      isSet: isDecryptionKeySet(env),
+      required: isOpenClientResponseEnabled(env),
+      message: incorrectConfigurationMessage,
+    },
+    {
+      label: openClientResponseVarName,
+      isSet: isOpenClientResponseSet(env),
+      required: false,
+      message:
+        "Your integration will work without the 'Open Client Response' feature. If you didn't set it intentionally, you can ignore this warning.",
+    },
+  ]
+
+  const isAllVarsAvailable = configurations.filter((t) => t.required && !t.isSet).length === 0
 
   let result = ''
-  if (!isAllVarsAvailable) {
+  if (isAllVarsAvailable) {
     result += `
     <span>
-    The following environment variables are not defined. Please reach out our support team.
-    </span>
-    `
-    if (!isScriptDownloadPathAvailable) {
-      result += `
-      <span>
-      ⚠️ <strong>${agentScriptDownloadPathVarName} </strong> is not set
-      </span>
-      `
-    }
-    if (!isGetResultPathAvailable) {
-      result += `
-      <span>
-      ⚠️ <strong>${getResultPathVarName} </strong> is not set
-      </span>
-      `
-    }
-    if (!isProxySecretAvailable) {
-      result += `
-      <span>
-      ⚠️ <strong>${proxySecretVarName} </strong> is not set
-      </span>
-      `
-    }
-  } else {
-    result += `
-    <span>
-     ✅ All required environment variables are set
+     ✅ All required configuration values are set
     </span>
     `
   }
 
-  if (!isOpenClientResponseVarSet) {
+  result += `<span>Your integration’s configuration values:</span>`
+
+  for (const configuration of configurations) {
     result += `
       <span>
-      ⚠️ <strong>${openClientResponseVarName} </strong> optional environment variable is not set<br />
-         <i>This environment variable is optional; your integration will work without the 'Open Client Response' feature. If you didn't set it intentionally, you can ignore this warning.</i>
+      ${configuration.isSet ? '✅' : '⚠️'} <strong>${configuration.label} </strong> (${configuration.required ? 'REQUIRED' : 'OPTIONAL'}) is${!configuration.isSet ? ' not ' : ' '}set
+      ${!configuration.isSet && configuration.message ? `<span>${configuration.message}</span>` : ''}
       </span>
       `
   }

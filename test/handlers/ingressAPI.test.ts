@@ -3,9 +3,12 @@ import { ConfigStore } from 'fastly:config-store'
 import { makeRequest } from '../utils/makeRequest'
 import { handleRequest } from '../../src'
 import cookie from 'cookie'
+import { SecretStore } from 'fastly:secret-store'
+import { env } from 'fastly:env'
 
 describe('Browser Cache', () => {
   let requestHeaders: Headers
+  let storeName: string
 
   beforeAll(() => {
     jest.spyOn(globalThis, 'fetch').mockImplementation((request, init) => {
@@ -14,9 +17,13 @@ describe('Browser Cache', () => {
       }
       return globalThis.fetch(request, init)
     })
+
+    const serviceId = env('FASTLY_SERVICE_ID')
+    const storeNamePrefix = process.env.STORE_NAME_PREFIX
+    storeName = `${storeNamePrefix}_${serviceId}`
   })
   beforeEach(() => {
-    const config = new ConfigStore('Fingerprint')
+    const config = new ConfigStore(storeName)
     // @ts-ignore
     config.set('GET_RESULT_PATH', 'result')
     // Reset fetch spy calls between tests if needed
@@ -44,6 +51,7 @@ describe('Browser Cache', () => {
 
 describe('Ingress', () => {
   let requestHeaders: Headers
+  let storeName: string
 
   beforeAll(() => {
     jest.spyOn(globalThis, 'fetch').mockImplementation((request, init) => {
@@ -52,9 +60,12 @@ describe('Ingress', () => {
       }
       return globalThis.fetch(request, init)
     })
+    const serviceId = env('FASTLY_SERVICE_ID')
+    const storeNamePrefix = process.env.STORE_NAME_PREFIX
+    storeName = `${storeNamePrefix}_${serviceId}`
   })
   beforeEach(() => {
-    const config = new ConfigStore('Fingerprint')
+    const config = new ConfigStore(storeName)
     // @ts-ignore
     config.set('GET_RESULT_PATH', 'result')
     // Reset fetch spy calls between tests if needed
@@ -104,9 +115,9 @@ describe('Ingress', () => {
   })
 
   it('should add proxy integration headers if PROXY_SECRET is present', async () => {
-    const config = new ConfigStore('Fingerprint')
+    const secretStore = new SecretStore('Fingerprint')
     // @ts-ignore
-    config.set('PROXY_SECRET', 'secret')
+    secretStore.set('PROXY_SECRET', 'secret')
 
     const request = makeRequest(new URL('https://test/result'), { method: 'POST' })
     await handleRequest(request)
@@ -117,9 +128,9 @@ describe('Ingress', () => {
   })
 
   it('should set client ip if request has header Fastly-Client-IP', async () => {
-    const config = new ConfigStore('Fingerprint')
+    const secretStore = new SecretStore('Fingerprint')
     // @ts-ignore
-    config.set('PROXY_SECRET', 'secret')
+    secretStore.set('PROXY_SECRET', 'secret')
 
     const request = makeRequest(new URL('https://test/result'), {
       method: 'POST',

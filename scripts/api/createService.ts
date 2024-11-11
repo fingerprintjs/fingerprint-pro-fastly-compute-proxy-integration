@@ -2,7 +2,7 @@ import { createClient } from '../utils/createClient'
 import { activateVersion } from './activateVersion'
 import { deployPackage } from './deployPackage'
 
-const CONFIG_STORE_NAME = process.env.CONFIG_STORE_NAME ?? 'Fingerprint'
+const STORE_NAME_PREFIX = process.env.STORE_NAME_PREFIX ?? 'E2ETest'
 
 export async function createService(domain: string) {
   const client = createClient('service')
@@ -21,11 +21,19 @@ export async function createService(domain: string) {
   })
   await createDomain(domain, createResponse.id)
   await createOrigin(createResponse.id, domain)
-  const configStore = await createConfigStore()
+  const configStore = await createConfigStore(createResponse.id)
   console.log('config store created')
+  const secretStore = await createSecretStore(createResponse.id)
+  console.log('secret store created')
+
   console.log('linking config store')
-  await linkConfigStore(createResponse.id, 1, configStore.id)
+  await linkStoreResource(createResponse.id, 1, configStore.id)
   console.log('config store linked')
+
+  console.log('linking secret store')
+  await linkStoreResource(createResponse.id, 1, secretStore.id, 'secret')
+  console.log('secret store linked')
+
   console.log('deploying package')
   await deployPackage(createResponse.id, 1)
   console.log('package deployed')
@@ -68,27 +76,64 @@ async function createDomain(domain: string, serviceId: string) {
   })
 }
 
-async function linkConfigStore(service_id: string, version_id: number, resource_id: string) {
+async function linkStoreResource(
+  service_id: string,
+  version_id: number,
+  resource_id: string,
+  type: 'secret' | 'config' = 'config'
+) {
+  const storeNameWithPrefix = `${STORE_NAME_PREFIX}_${type === 'config' ? 'Config_Store' : 'Secret_Store'}_${service_id}`
   return createClient('resource').createResource({
     service_id,
     version_id,
     resource_id,
-    name: CONFIG_STORE_NAME,
+    name: storeNameWithPrefix,
   })
 }
 
-async function createConfigStore() {
+async function createSecretStore(service_id: string) {
+  console.log('Creating secret store')
+  const secretStoreNameWithPrefix = `${STORE_NAME_PREFIX}_Secret_Store_${service_id}`
+  const secretStoreClient = createClient('secretStore')
+  const secretStoreItemClient = createClient('secretStoreItem')
+  let secretStore
+  try {
+    secretStore = await secretStoreClient.createSecretStore({
+      secret_store: {
+        name: secretStoreNameWithPrefix,
+      },
+    })
+  } catch (e) {
+    console.error('Could not create secret store', e)
+    const stores = await secretStoreClient.getSecretStores()
+    return stores.find((t: any) => t.name === secretStoreNameWithPrefix)
+  }
+
+  await secretStoreItemClient.createSecret({
+    secret: {
+      name: 'PROXY_SECRET',
+      secret: btoa(process.env.PROXY_SECRET ?? 'secret'),
+    },
+    store_id: secretStore.id,
+  })
+
+  return secretStore
+}
+
+async function createConfigStore(service_id: string) {
   console.log('Creating config store')
+  const configStoreNameWithPrefix = `${STORE_NAME_PREFIX}_Config_Store_${service_id}`
   const configStoreClient = createClient('configStore')
   const configStoreItemClient = createClient('configStoreItem')
   let configStore
   try {
     configStore = await configStoreClient.createConfigStore({
-      name: CONFIG_STORE_NAME,
+      name: configStoreNameWithPrefix,
     })
-  } catch (_) {
+  } catch (e) {
+    console.error('Could not create config store', e)
     const stores = await configStoreClient.listConfigStores()
-    return stores.find((t: any) => t.name === CONFIG_STORE_NAME)
+    return stores.find((t: any) => t.name === configStoreNameWithPrefix)
   }
   await configStoreItemClient.createConfigStoreItem({
     config_store_id: configStore.id,
@@ -102,12 +147,7 @@ async function createConfigStore() {
   })
   await configStoreItemClient.createConfigStoreItem({
     config_store_id: configStore.id,
-    item_key: 'PROXY_SECRET',
-    item_value: 'secret',
-  })
-  await configStoreItemClient.createConfigStoreItem({
-    config_store_id: configStore.id,
-    item_key: 'OPEN_CLIENT_RESPONSE_ENABLED',
+    item_key: 'OPEN_CLIENT_RESPONSE_PLUGINS_ENABLED',
     item_value: 'false',
   })
 

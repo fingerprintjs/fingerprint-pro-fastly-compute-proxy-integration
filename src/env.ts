@@ -2,18 +2,17 @@ export type IntegrationEnv = {
   AGENT_SCRIPT_DOWNLOAD_PATH: string | null
   GET_RESULT_PATH: string | null
   PROXY_SECRET: string | null
-  OPEN_CLIENT_RESPONSE_ENABLED: string | null
+  OPEN_CLIENT_RESPONSE_PLUGINS_ENABLED: string | null
+  DECRYPTION_KEY: string | null
 }
 
 const Defaults: IntegrationEnv = {
   AGENT_SCRIPT_DOWNLOAD_PATH: 'agent',
   GET_RESULT_PATH: 'result',
   PROXY_SECRET: null,
-  OPEN_CLIENT_RESPONSE_ENABLED: 'false',
+  OPEN_CLIENT_RESPONSE_PLUGINS_ENABLED: 'false',
+  DECRYPTION_KEY: null,
 }
-
-export const FingerprintSecretStoreName = 'FingerprintSecrets'
-export const FingerprintDecryptionKeyName = 'decryptionKey'
 
 function getVarOrDefault(
   variable: keyof IntegrationEnv,
@@ -52,14 +51,23 @@ export const proxySecretVarName = 'PROXY_SECRET'
 const getProxySecretVar = getVarOrDefault(proxySecretVarName, Defaults)
 export const isProxySecretSet = isVarSet(proxySecretVarName)
 
-export const openClientResponseVarName = 'OPEN_CLIENT_RESPONSE_ENABLED'
-export const isOpenClientResponseSet = isVarSet(openClientResponseVarName)
+export const decryptionKeyVarName = 'DECRYPTION_KEY'
+const getDecryptionKeyVar = getVarOrDefault(decryptionKeyVarName, Defaults)
+export const isDecryptionKeySet = isVarSet(decryptionKeyVarName)
+
+export const openClientResponseVarName = 'OPEN_CLIENT_RESPONSE_PLUGINS_ENABLED'
+export const isOpenClientResponseSet = (env: IntegrationEnv) =>
+  env.OPEN_CLIENT_RESPONSE_PLUGINS_ENABLED === 'true' || env.OPEN_CLIENT_RESPONSE_PLUGINS_ENABLED === 'false'
 
 export const isOpenClientResponseEnabled = (env: IntegrationEnv) =>
   env[openClientResponseVarName]?.toLowerCase() === 'true'
 
 export function getProxySecret(env: IntegrationEnv): string | null {
   return getProxySecretVar(env)
+}
+
+export function getDecryptionKey(env: IntegrationEnv): string | null {
+  return getDecryptionKeyVar(env)
 }
 
 export function getStatusPagePath(): string {
