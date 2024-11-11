@@ -38,9 +38,11 @@ async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv)
   console.log('Plugin system for Open Client Response is enabled')
   if (response.status >= 200 && response.status < 300) {
     const responseBody = await response.text()
-    processOpenClientResponse(responseBody, response, env).catch((e) =>
-      console.error('Processing open client response failed: ', e)
-    )
+    Promise.resolve().then(() => {
+      processOpenClientResponse(responseBody, response, env).catch((e) =>
+        console.error('Processing open client response failed: ', e)
+      )
+    })
     return cloneFastlyResponse(responseBody, response)
   }
 
