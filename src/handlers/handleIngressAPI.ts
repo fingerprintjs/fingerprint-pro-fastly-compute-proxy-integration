@@ -37,12 +37,17 @@ async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv)
 
   console.log('Plugin system for Open Client Response is enabled')
   if (response.status >= 200 && response.status < 300) {
+    console.log('Response is successful, plugins will be executed')
     const responseBody = await response.text()
+    console.log('Response body parsed!')
+    console.log('Plugins started!')
     processOpenClientResponse(responseBody, response, env).catch((e) =>
       console.error('Processing open client response failed: ', e)
     )
+    console.log('Avoided waiting for plugins, returning response')
     return cloneFastlyResponse(responseBody, response)
   }
+  console.log('Plugin system did not worked because response is not successful')
 
   return response
 }

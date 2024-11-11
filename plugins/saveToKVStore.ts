@@ -4,9 +4,12 @@ import { KVStore } from 'fastly:kv-store'
 import { ProcessOpenClientResponseContext } from '../src/utils/registerPlugin'
 import { getConfigStore } from '../src/utils/getStore'
 import { env } from 'fastly:env'
+import { waitForMs } from '../src/utils/waitForMs'
 export async function saveFingerprintResultToKVStore(context: ProcessOpenClientResponseContext) {
   const configStore = getConfigStore()
   const isPluginEnabled = configStore?.get('SAVE_TO_KV_STORE_PLUGIN_ENABLED') === 'true'
+
+  await waitForMs(10000, () => console.log('Hello from the plugin saveFingerprintResultToKVStore!'))
 
   if (!isPluginEnabled) {
     console.log("Plugin 'saveFingerprintResultToKVStore' is not enabled")
