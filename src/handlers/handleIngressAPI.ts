@@ -40,8 +40,8 @@ async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv)
     console.log('Response is successful, plugins will be executed')
     const responseBody = await response.text()
     console.log('Response body parsed!')
-    console.log('Plugins started!')
     Promise.resolve().then(() => {
+      console.log('Plugins started!')
       processOpenClientResponse(responseBody, response, env).catch((e) =>
         console.error('Processing open client response failed: ', e)
       )
