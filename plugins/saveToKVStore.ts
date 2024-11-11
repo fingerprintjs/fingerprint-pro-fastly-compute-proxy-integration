@@ -8,14 +8,16 @@ export async function saveFingerprintResultToKVStore(context: ProcessOpenClientR
   const configStore = getConfigStore()
   const isPluginEnabled = configStore?.get('SAVE_TO_KV_STORE_PLUGIN_ENABLED') === 'true'
 
-  if (isPluginEnabled) {
-    const requestId = context.event?.products.identification?.data?.requestId
-    if (!requestId) {
-      return
-    }
-    const serviceId = env('FASTLY_SERVICE_ID')
-    const store = new KVStore(`Fingerprint_Results_${serviceId}`)
-    await store.put(requestId, JSON.stringify(context.event))
-    console.log('VPN Confidence', context.event?.products.vpn?.data?.confidence)
+  if (!isPluginEnabled) {
+    console.log("Plugin 'saveFingerprintResultToKVStore' is not enabled")
+    return
   }
+
+  const requestId = context.event?.products.identification?.data?.requestId
+  if (!requestId) {
+    return
+  }
+  const serviceId = env('FASTLY_SERVICE_ID')
+  const store = new KVStore(`Fingerprint_Results_${serviceId}`)
+  await store.put(requestId, JSON.stringify(context.event))
 }
