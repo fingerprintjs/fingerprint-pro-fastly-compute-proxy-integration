@@ -30,7 +30,7 @@ async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv)
 
   if (!isOpenClientResponseEnabled(env)) {
     console.log(
-      "Open client response plugings are disabled. Set OPEN_CLIENT_RESPONSE_PLUGINS_ENABLED to `true` in your proxy integration's Config store to enable them."
+      "Open client response plugins are disabled. Set OPEN_CLIENT_RESPONSE_PLUGINS_ENABLED to `true` in your proxy integration's Config store to enable them."
     )
     return response
   }
