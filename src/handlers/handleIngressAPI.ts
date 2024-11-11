@@ -29,9 +29,11 @@ async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv)
   const response = await fetch(request, { backend: getIngressBackendByRegion(url) })
 
   if (!isOpenClientResponseEnabled(env)) {
+    console.log('Plugin system for Open Client Response is disabled')
     return response
   }
 
+  console.log('Plugin system for Open Client Response is enabled')
   if (response.status >= 200 && response.status < 300) {
     const responseBody = await response.text()
     processOpenClientResponse(responseBody, response, env).catch((e) =>
