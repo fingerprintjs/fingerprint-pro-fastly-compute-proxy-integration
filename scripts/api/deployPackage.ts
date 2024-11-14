@@ -5,6 +5,6 @@ export async function deployPackage(service_id: string, versionId: number) {
   return createClient('package').putPackage({
     version_id: versionId,
     service_id,
-    _package: fs.createReadStream(__dirname + '/../../pkg/fingerprint-pro-fastly-proxy-integration.tar.gz'),
+    _package: fs.createReadStream(__dirname + '/../../pkg/fingerprint-fastly-compute-proxy-integration.tar.gz'),
   })
 }

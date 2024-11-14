@@ -10,11 +10,11 @@
 
 We prefer using [pnpm](https://pnpm.io/) for managing dependencies and running scripts.
 
-For proposing changes, use the standard [pull request approach](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request). It’s recommended to discuss fixes or new features in the Issues first.
-
 - The `main` branch is locked for direct pushes.
 - The `rc` branch is used for active development of new features.
 - Releases are created from the `main` branch.
+
+For proposing changes, use the standard [pull request approach](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request). Please ensure that your pull request is directed to the `rc` branch, as this is our active development branch for new features. You can create a PR to the `rc` branch from your own branch [here](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/compare/rc...). It’s recommended to discuss fixes or new features in the Issues first.
 
 ### How to Build
 

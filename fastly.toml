@@ -1,21 +1,14 @@
 # This file describes a Fastly Compute package. To learn more visit:
 # https://developer.fastly.com/reference/fastly-toml/
 
-authors = []
-cloned_from = "https://github.com/fastly/compute-starter-kit-typescript"
+authors = ["support@fingerprint.com"]
+cloned_from = "https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration"
 description = "Fingerprint Proxy Fastly Compute Package"
 language = "javascript"
 manifest_version = 3
-name = "fingerprint-pro-fastly-proxy-integration"
+name = "fingerprint-fastly-compute-proxy-integration"
 service_id = ""
 
 [scripts]
   build = "pnpm build"
   post_init = "pnpm install"
-
-#[local_server]
-#  [local_server.backends]
-#    [local_server.backends.fpcdn]
-#      url = "http://localhost:1234"
-#    [local_server.backends.fpjs]
-#      url = "http://localhost:1234"

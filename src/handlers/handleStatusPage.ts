@@ -110,7 +110,7 @@ function createEnvVarsInformationElement(env: IntegrationEnv): string {
     result += `
       <span>
       ${configuration.isSet ? '✅' : '⚠️'} <strong>${configuration.label} </strong> (${configuration.required ? 'REQUIRED' : 'OPTIONAL'}) is${!configuration.isSet ? ' not ' : ' '}set
-      ${!configuration.isSet && configuration.message ? `<span>${configuration.message}</span>` : ''}
+      ${configuration.required && !configuration.isSet && configuration.message ? `<span>${configuration.message}</span>` : ''}
       </span>
       `
   }
