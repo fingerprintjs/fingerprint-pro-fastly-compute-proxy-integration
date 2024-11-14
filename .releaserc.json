@@ -48,8 +48,8 @@
       {
         "assets":[
           {
-            "path":"pkg/package.tar.gz",
-            "label":"fingerprint-proxy-integration.tar.gz"
+            "path":"pkg/fingerprint-fastly-compute-proxy-integration.tar.gz",
+            "label":"fingerprint-fastly-compute-proxy-integration.tar.gz"
           }
         ]
       }

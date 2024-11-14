@@ -1,3 +1,11 @@
+## [0.2.1-rc.1](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/compare/v0.2.0...v0.2.1-rc.1) (2024-11-14)
+
+
+### Bug Fixes
+
+* change release artifact name ([a3d44da](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/commit/a3d44da4628930f73f5d0d87d3f64ee0d20b8ca4))
+* move plugins to the next tick of event loop ([6a3d554](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/commit/6a3d5547ad9c928b436431c5b4212abf473f4c1b))
+
 ## [0.2.0](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/compare/v0.1.0...v0.2.0) (2024-11-11)
 
 

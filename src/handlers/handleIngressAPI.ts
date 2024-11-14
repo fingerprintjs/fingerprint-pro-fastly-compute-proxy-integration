@@ -30,7 +30,7 @@ async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv)
 
   if (!isOpenClientResponseEnabled(env)) {
     console.log(
-      "Open client response plugings are disabled. Set OPEN_CLIENT_RESPONSE_PLUGINS_ENABLED to `true` in your proxy integration's Config store to enable them."
+      "Open client response plugins are disabled. Set OPEN_CLIENT_RESPONSE_PLUGINS_ENABLED to `true` in your proxy integration's Config store to enable them."
     )
     return response
   }
@@ -38,9 +38,11 @@ async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv)
   console.log('Plugin system for Open Client Response is enabled')
   if (response.status >= 200 && response.status < 300) {
     const responseBody = await response.text()
-    processOpenClientResponse(responseBody, response, env).catch((e) =>
-      console.error('Processing open client response failed: ', e)
-    )
+    Promise.resolve().then(() => {
+      processOpenClientResponse(responseBody, response, env).catch((e) =>
+        console.error('Processing open client response failed: ', e)
+      )
+    })
     return cloneFastlyResponse(responseBody, response)
   }
 
