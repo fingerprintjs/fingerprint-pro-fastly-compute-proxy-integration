@@ -68,7 +68,7 @@ function makeCacheEndpointRequest(receivedRequest: Request, routeMatches: RegExp
 
   const apiBackend = getIngressBackendByRegion(url)
   if (!Backend.exists(apiBackend)) {
-    console.log(`Requested backend by the region is not exists in your setup: ${apiBackend}`)
+    console.log(`Requested backend '${apiBackend}' does not exist. Check your Compute service Hosts configuration.`)
   }
 
   console.log(`sending cache request to ${url}...`)
