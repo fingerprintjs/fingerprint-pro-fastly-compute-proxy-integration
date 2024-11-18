@@ -61,10 +61,12 @@ export function createErrorResponseForIngress(request: Request, error: string | 
     'Access-Control-Allow-Credentials': 'true',
     'content-type': 'application/json',
   }
+  console.log(`Error occurred for ingress request, reason: ${reason}`)
   return new Response(JSON.stringify(responseBody), { status: 500, headers: responseHeaders })
 }
 
 export function createFallbackErrorResponse(error: string | Error | unknown): Response {
   const responseBody = { error: errorToString(error) }
+  console.log(`Error occurred, reason: ${responseBody}`)
   return new Response(JSON.stringify(responseBody), { status: 500, headers: { 'content-type': 'application/json' } })
 }

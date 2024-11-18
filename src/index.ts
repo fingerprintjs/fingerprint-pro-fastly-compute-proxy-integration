@@ -29,9 +29,14 @@ export async function handleRequest(event: FetchEvent): Promise<Response> {
 
 async function getEnvObject(): Promise<IntegrationEnv> {
   let configStore
-  let secretStore
   try {
     configStore = getConfigStore()
+  } catch (e) {
+    console.error(e)
+  }
+
+  let secretStore
+  try {
     secretStore = getSecretStore()
   } catch (e) {
     console.error(e)
