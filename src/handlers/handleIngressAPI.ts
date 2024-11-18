@@ -10,6 +10,7 @@ import { processOpenClientResponse } from '../utils/processOpenClientResponse'
 import { cloneFastlyResponse } from '../utils/cloneFastlyResponse'
 import { getIngressBackendByRegion } from '../utils/getIngressBackendByRegion'
 import { CacheOverride } from 'fastly:cache-override'
+import { Backend } from 'fastly:backend'
 
 async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv) {
   if (!isProxySecretSet) {
@@ -28,8 +29,13 @@ async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv)
   }
   addProxyIntegrationHeaders(request.headers, receivedRequest.url, env)
 
+  const apiBackend = getIngressBackendByRegion(url)
+  if (!Backend.exists(apiBackend)) {
+    console.log(`Requested backend by the region is not exists in your setup: ${apiBackend}`)
+  }
+
   console.log(`sending ingress request to ${url.toString()}...`)
-  const response = await fetch(request, { backend: getIngressBackendByRegion(url) })
+  const response = await fetch(request, { backend: apiBackend })
 
   if (!isOpenClientResponseEnabled(env)) {
     console.log(
@@ -60,8 +66,13 @@ function makeCacheEndpointRequest(receivedRequest: Request, routeMatches: RegExp
   const request = new Request(url, receivedRequest as RequestInit)
   request.headers.delete('Cookie')
 
+  const apiBackend = getIngressBackendByRegion(url)
+  if (!Backend.exists(apiBackend)) {
+    console.log(`Requested backend by the region is not exists in your setup: ${apiBackend}`)
+  }
+
   console.log(`sending cache request to ${url}...`)
-  return fetch(request, { backend: getIngressBackendByRegion(url), cacheOverride: new CacheOverride('pass') })
+  return fetch(request, { backend: apiBackend, cacheOverride: new CacheOverride('pass') })
 }
 
 export async function handleIngressAPI(
