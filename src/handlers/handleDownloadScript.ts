@@ -18,6 +18,6 @@ export async function handleDownloadScript(request: Request): Promise<Response> 
   try {
     return await makeDownloadScriptRequest(request)
   } catch (e) {
-    return createFallbackErrorResponse(e)
+    return createFallbackErrorResponse(request, e)
   }
 }

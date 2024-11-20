@@ -17,13 +17,13 @@ addEventListener('fetch', (event) => event.respondWith(handleRequest(event)))
 
 export async function handleRequest(event: FetchEvent): Promise<Response> {
   setClientIp(event.client.address)
+  const request = event.request
   try {
-    const request = event.request
     const envObj = await getEnvObject()
     return handleReq(request, envObj).then(returnHttpResponse)
   } catch (e) {
     console.error(e)
-    return createFallbackErrorResponse('something went wrong')
+    return createFallbackErrorResponse(request, 'something went wrong')
   }
 }
 
