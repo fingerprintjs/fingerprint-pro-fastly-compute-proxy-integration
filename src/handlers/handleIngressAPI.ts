@@ -73,7 +73,7 @@ export async function handleIngressAPI(
     try {
       return await makeCacheEndpointRequest(request, routeMatches)
     } catch (e) {
-      return createFallbackErrorResponse(e)
+      return createFallbackErrorResponse(request, e)
     }
   }
 

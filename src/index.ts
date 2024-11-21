@@ -15,6 +15,6 @@ export async function handleRequest(event: FetchEvent): Promise<Response> {
     return handleReq(request, envObj).then(returnHttpResponse)
   } catch (e) {
     console.error(e)
-    return createFallbackErrorResponse('something went wrong')
+    return createFallbackErrorResponse(event.request, 'something went wrong')
   }
 }

@@ -89,9 +89,10 @@ describe('createErrorResponseForIngress', () => {
 
 describe('createFallbackErrorResponse', () => {
   let response: Response
+  const req = new Request('test')
   beforeEach(() => {
     const errorReason = 'some error message'
-    response = createFallbackErrorResponse(errorReason)
+    response = createFallbackErrorResponse(req, errorReason)
   })
   test('response body is as expected', async () => {
     expect(response.body).not.toBeNull()
