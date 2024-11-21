@@ -13,6 +13,7 @@ import {
   isDecryptionKeySet,
 } from '../env'
 import packageJson from '../../package.json'
+import { env } from 'fastly:env'
 
 function generateNonce() {
   let result = ''
@@ -35,9 +36,13 @@ function buildHeaders(styleNonce: string): Headers {
 }
 
 function createVersionElement(): string {
+  const fastlyServiceVersion = env('FASTLY_SERVICE_VERSION')
   return `
   <span>
   ℹ️ Integration version: ${packageJson.version}
+  </span>
+  <span>
+  ℹ️ Fastly Compute Service version: ${fastlyServiceVersion}
   </span>
   `
 }

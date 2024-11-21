@@ -41,7 +41,7 @@ describe('createErrorResponseForIngress', () => {
     const reqWithNoOrigin = new Request('https://example.com')
     const errorReason = 'some error'
     const response = createErrorResponseForIngress(reqWithNoOrigin, errorReason)
-    expect(response.headers.get('Access-Control-Allow-Origin')).toBe('')
+    expect(response.headers.get('Access-Control-Allow-Origin')).toBe('*')
   })
   test('handles error type error messages correctly', async () => {
     const reqWithNoOrigin = new Request('https://example.com')
@@ -89,9 +89,10 @@ describe('createErrorResponseForIngress', () => {
 
 describe('createFallbackErrorResponse', () => {
   let response: Response
+  const req = new Request('http://test')
   beforeEach(() => {
     const errorReason = 'some error message'
-    response = createFallbackErrorResponse(errorReason)
+    response = createFallbackErrorResponse(req, errorReason)
   })
   test('response body is as expected', async () => {
     expect(response.body).not.toBeNull()

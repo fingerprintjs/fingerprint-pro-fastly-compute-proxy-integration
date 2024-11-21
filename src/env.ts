@@ -1,3 +1,5 @@
+import { getConfigStore, getSecretStore } from './utils/getStore'
+
 export type IntegrationEnv = {
   AGENT_SCRIPT_DOWNLOAD_PATH: string | null
   GET_RESULT_PATH: string | null
@@ -72,4 +74,28 @@ export function getDecryptionKey(env: IntegrationEnv): string | null {
 
 export function getStatusPagePath(): string {
   return `/status`
+}
+
+export async function getEnvObject(): Promise<IntegrationEnv> {
+  let configStore
+  try {
+    configStore = getConfigStore()
+  } catch (e) {
+    console.error(e)
+  }
+
+  let secretStore
+  try {
+    secretStore = getSecretStore()
+  } catch (e) {
+    console.error(e)
+  }
+
+  return {
+    AGENT_SCRIPT_DOWNLOAD_PATH: configStore?.get(agentScriptDownloadPathVarName) ?? null,
+    GET_RESULT_PATH: configStore?.get(getResultPathVarName) ?? null,
+    OPEN_CLIENT_RESPONSE_PLUGINS_ENABLED: configStore?.get(openClientResponseVarName) ?? null,
+    PROXY_SECRET: (await secretStore?.get(proxySecretVarName))?.plaintext() ?? null,
+    DECRYPTION_KEY: (await secretStore?.get(decryptionKeyVarName))?.plaintext() ?? null,
+  }
 }
