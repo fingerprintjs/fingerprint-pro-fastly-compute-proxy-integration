@@ -1,3 +1,16 @@
+## [0.3.0-rc.1](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/compare/v0.2.1...v0.3.0-rc.1) (2024-11-21)
+
+
+### Features
+
+* add fastly compute service version to status page ([b7cd7b1](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/commit/b7cd7b15dfd60708452f0ccef8d138387655ddbb))
+
+
+### Bug Fixes
+
+* add cors headers for error response ([0c9a721](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/commit/0c9a721e4be67676505b09f14e36fb482d6f91d5))
+* enable metadata on pack step ([565affd](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/commit/565affd396c42b5ee7bb2a332a33b5a2dd0331c5))
+
 ## [0.2.1](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/compare/v0.2.0...v0.2.1) (2024-11-14)
 
 
