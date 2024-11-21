@@ -89,7 +89,7 @@ describe('createErrorResponseForIngress', () => {
 
 describe('createFallbackErrorResponse', () => {
   let response: Response
-  const req = new Request('test')
+  const req = new Request('http://test')
   beforeEach(() => {
     const errorReason = 'some error message'
     response = createFallbackErrorResponse(req, errorReason)
