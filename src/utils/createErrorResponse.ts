@@ -55,7 +55,7 @@ export function createErrorResponseForIngress(request: Request, error: string | 
     requestId: generateRequestId(),
     products: {},
   }
-  const requestOrigin = request.headers.get('origin') || ''
+  const requestOrigin = request.headers.get('origin') || '*'
   const responseHeaders: HeadersInit = {
     'Access-Control-Allow-Origin': requestOrigin,
     'Access-Control-Allow-Credentials': 'true',
