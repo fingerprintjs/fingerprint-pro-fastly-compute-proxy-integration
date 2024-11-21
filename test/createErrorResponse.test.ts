@@ -41,7 +41,7 @@ describe('createErrorResponseForIngress', () => {
     const reqWithNoOrigin = new Request('https://example.com')
     const errorReason = 'some error'
     const response = createErrorResponseForIngress(reqWithNoOrigin, errorReason)
-    expect(response.headers.get('Access-Control-Allow-Origin')).toBe('')
+    expect(response.headers.get('Access-Control-Allow-Origin')).toBe('*')
   })
   test('handles error type error messages correctly', async () => {
     const reqWithNoOrigin = new Request('https://example.com')

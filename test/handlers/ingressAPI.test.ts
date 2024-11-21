@@ -1,4 +1,4 @@
-import { beforeAll, beforeEach, describe, expect } from '@jest/globals'
+import { beforeAll, beforeEach, describe, expect, jest } from '@jest/globals'
 import { ConfigStore } from 'fastly:config-store'
 import { makeRequest } from '../utils/makeRequest'
 import { handleRequest } from '../../src'
@@ -138,5 +138,25 @@ describe('Ingress', () => {
     await handleRequest(request)
 
     expect(requestHeaders.get('FPJS-Proxy-Client-IP')).toBe('test')
+  })
+})
+
+describe('Ingress Errors', () => {
+  beforeAll(() => {
+    jest.spyOn(globalThis, 'fetch').mockImplementation(() => {
+      return new Promise<Response>((_, reject) => {
+        reject('Test Error')
+      })
+    })
+  })
+
+  it.each(['GET', 'POST'])('should return CORS Headers when method is %s', async (method) => {
+    const request = makeRequest(new URL('https://test/result'), { method, headers: { Origin: 'test.origin' } })
+    const response = await handleRequest(request)
+
+    expect(response.headers.has('Access-Control-Allow-Origin')).toBe(true)
+    expect(response.headers.has('Access-Control-Allow-Credentials')).toBe(true)
+    expect(response.headers.get('Access-Control-Allow-Origin')).toBe('test.origin')
+    expect(response.headers.get('Access-Control-Allow-Credentials')).toBe('true')
   })
 })
