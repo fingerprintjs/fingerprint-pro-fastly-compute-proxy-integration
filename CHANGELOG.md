@@ -1,3 +1,10 @@
+## [0.3.0-rc.2](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/compare/v0.3.0-rc.1...v0.3.0-rc.2) (2024-11-22)
+
+
+### Bug Fixes
+
+* update fastly cli version to fix metadata bug ([95b2d60](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/commit/95b2d60ad5bbe5c85a4c7075827cc69ad775122e))
+
 ## [0.3.0-rc.1](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/compare/v0.2.1...v0.3.0-rc.1) (2024-11-21)
 
 
