@@ -1,3 +1,10 @@
+## [0.3.0-rc.3](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/compare/v0.3.0-rc.2...v0.3.0-rc.3) (2024-11-25)
+
+
+### Bug Fixes
+
+* create artifact via metadata ([ba22a53](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/commit/ba22a538130c75d22aa119aeb403390ca35f9426))
+
 ## [0.3.0-rc.2](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/compare/v0.3.0-rc.1...v0.3.0-rc.2) (2024-11-22)
 
 
