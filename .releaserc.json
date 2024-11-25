@@ -30,7 +30,7 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd":"pnpm build"
+        "prepareCmd":"pnpm artifact:create"
       }
     ],
     [
