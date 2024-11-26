@@ -55,6 +55,7 @@ async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv)
   }
 
   if (responseBody == null) {
+    console.log('responseBody is null. Skipping plugins and returning the response.')
     return cloneFastlyResponse(bodyBytes, response)
   }
 
