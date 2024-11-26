@@ -47,6 +47,16 @@ async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv)
   }
 
   const bodyBytes = await response.arrayBuffer()
+  try {
+    handleOpenClientResponse(bodyBytes, response, env)
+  } catch (e) {
+    // do nothing
+  }
+
+  return cloneFastlyResponse(bodyBytes, response)
+}
+
+function handleOpenClientResponse(bodyBytes: ArrayBuffer, response: Response, env: IntegrationEnv) {
   let responseBody: string | null = null
   try {
     responseBody = new TextDecoder('utf-8').decode(bodyBytes)
@@ -56,7 +66,7 @@ async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv)
 
   if (responseBody == null) {
     console.log('responseBody is null. Skipping plugins and returning the response.')
-    return cloneFastlyResponse(bodyBytes, response)
+    return
   }
 
   Promise.resolve().then(() => {
@@ -64,8 +74,6 @@ async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv)
       console.error('Processing open client response failed: ', e)
     )
   })
-
-  return cloneFastlyResponse(bodyBytes, response)
 }
 
 function makeCacheEndpointRequest(receivedRequest: Request, routeMatches: RegExpMatchArray | undefined) {
