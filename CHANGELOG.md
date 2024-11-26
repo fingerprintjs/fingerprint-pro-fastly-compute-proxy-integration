@@ -1,3 +1,10 @@
+## [0.3.0-rc.4](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/compare/v0.3.0-rc.3...v0.3.0-rc.4) (2024-11-26)
+
+
+### Bug Fixes
+
+* when open client response is enabled, non utf body throws an error ([d88dc2b](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/commit/d88dc2bb6ee36df4a3098ef390c3afd1ed151c2b))
+
 ## [0.3.0-rc.3](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/compare/v0.3.0-rc.2...v0.3.0-rc.3) (2024-11-25)
 
 
