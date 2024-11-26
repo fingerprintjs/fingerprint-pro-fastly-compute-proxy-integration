@@ -8,7 +8,7 @@ type FingerprintSealedIngressResponseBody = {
 }
 
 export async function processOpenClientResponse(
-  body: string | undefined,
+  body: string | null,
   response: Response,
   env: IntegrationEnv
 ): Promise<void> {

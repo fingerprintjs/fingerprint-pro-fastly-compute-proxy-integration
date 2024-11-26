@@ -39,17 +39,33 @@ async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv)
   }
 
   console.log('Plugin system for Open Client Response is enabled')
-  if (response.status >= 200 && response.status < 300) {
-    const responseBody = await response.text()
-    Promise.resolve().then(() => {
-      processOpenClientResponse(responseBody, response, env).catch((e) =>
-        console.error('Processing open client response failed: ', e)
-      )
-    })
-    return cloneFastlyResponse(responseBody, response)
+  if (response.status < 200 || response.status > 299) {
+    console.log(
+      `Response status is non-successful (HTTP ${response.status}). Skipping plugins and returning the response.`
+    )
+    return response
   }
 
-  return response
+  const bodyBytes = await response.arrayBuffer()
+  let responseBody: string | null = null
+  try {
+    responseBody = new TextDecoder('utf-8').decode(bodyBytes)
+  } catch (e) {
+    console.log(`Error occurred when decoding response to UTF-8: ${e}.`)
+  }
+
+  if (responseBody == null) {
+    console.log('responseBody is null. Skipping plugins and returning the response.')
+    return cloneFastlyResponse(bodyBytes, response)
+  }
+
+  Promise.resolve().then(() => {
+    processOpenClientResponse(responseBody, response, env).catch((e) =>
+      console.error('Processing open client response failed: ', e)
+    )
+  })
+
+  return cloneFastlyResponse(bodyBytes, response)
 }
 
 function makeCacheEndpointRequest(receivedRequest: Request, routeMatches: RegExpMatchArray | undefined) {

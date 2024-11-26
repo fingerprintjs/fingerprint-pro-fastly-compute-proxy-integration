@@ -1,4 +1,4 @@
-export function cloneFastlyResponse(body: string | undefined, response: Response) {
+export function cloneFastlyResponse(body: string | ArrayBuffer | null, response: Response) {
   return new Response(body, {
     headers: response.headers,
     status: response.status,
