@@ -39,7 +39,6 @@ describe('Status Page', () => {
     const response = await handleRequest(request)
 
     const responseText = await response.text()
-    console.log(responseText)
     const isAllSet = responseText.includes('All required configurations are set')
     const agentDownloadScriptPathError = responseText.includes(
       '<strong>AGENT_SCRIPT_DOWNLOAD_PATH</strong> (REQUIRED) is not set.'
