@@ -18,6 +18,7 @@ import {
 import packageJson from '../../package.json'
 import { env } from 'fastly:env'
 import { getBuiltinKVStore } from '../utils/getStore'
+import { Backend } from 'fastly:backend'
 
 function generateNonce() {
   let result = ''
@@ -49,6 +50,43 @@ function createVersionElement(): string {
   ℹ️ Fastly Compute Service version: ${fastlyServiceVersion}
   </span>
   `
+}
+
+function createBackendCheckElements(): string {
+  const resultApi = Backend.exists('api.fpjs.io')
+  const europeResultApi = Backend.exists('eu.api.fpjs.io')
+  const asiaResultApi = Backend.exists('ap.api.fpjs.io')
+  const fpcdnApi = Backend.exists('fpcdn.io')
+
+  if (resultApi && europeResultApi && asiaResultApi && fpcdnApi) {
+    return '<span>✅ Integration setup supports all ingress regions and agent download endpoint.</span>'
+  }
+
+  let result = ''
+
+  if (!fpcdnApi) {
+    result += '<span>⚠️ Your integration is missing "fpcdn.io" backend host.</span>'
+  }
+
+  if (!resultApi && !europeResultApi && !asiaResultApi) {
+    result +=
+      '<span>⚠️ At least one of the backends "api.fpjs.io", "eu.api.fpjs.io", or "ap.api.fpjs.io" must exist.</span>'
+  } else {
+    const supportedRegions = []
+    if (resultApi) {
+      supportedRegions.push('US')
+    }
+    if (europeResultApi) {
+      supportedRegions.push('EU')
+    }
+    if (asiaResultApi) {
+      supportedRegions.push('AP')
+    }
+    if (supportedRegions.length > 0) {
+      result += `<span>⚠️ Integration is configured for these regions only: ${supportedRegions.join(', ')}.</span>`
+    }
+  }
+  return result
 }
 
 function isValidBase64(str: string | null | undefined): boolean {
@@ -235,6 +273,7 @@ async function buildBody(env: IntegrationEnv, styleNonce: string): Promise<strin
 
   body += createVersionElement()
   body += await createEnvVarsInformationElement(env)
+  body += createBackendCheckElements()
   body += createContactInformationElement()
 
   body += `  
