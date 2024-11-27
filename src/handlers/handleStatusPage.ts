@@ -119,6 +119,14 @@ function buildConfigurationMessage(config: ConfigurationStatus, env: Integration
     result += `<span>⚠️Your ${saveToKvStorePluginEnabledVarName} is set & enabled but decryption is not correct, requests will not be saved in your KV Store</span>`
   }
 
+  if (
+    label === saveToKvStorePluginEnabledVarName &&
+    isSaveToKvStorePluginEnabled(env) &&
+    !isOpenClientResponseEnabled(env)
+  ) {
+    result += `<span>⚠️ The built-in plugin for saving results to the KV Store is enabled, but the ${openClientResponseVarName} is not set to true, so this plugin won't work.</span>`
+  }
+
   return `<span>${result}</span>`
 }
 
