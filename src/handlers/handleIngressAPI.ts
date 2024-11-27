@@ -47,33 +47,13 @@ async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv)
   }
 
   const bodyBytes = await response.arrayBuffer()
-  try {
-    handleOpenClientResponse(bodyBytes, response, env)
-  } catch (e) {
-    // do nothing
-  }
-
-  return cloneFastlyResponse(bodyBytes, response)
-}
-
-function handleOpenClientResponse(bodyBytes: ArrayBuffer, response: Response, env: IntegrationEnv) {
-  let responseBody: string | null = null
-  try {
-    responseBody = new TextDecoder('utf-8').decode(bodyBytes)
-  } catch (e) {
-    console.log(`Error occurred when decoding response to UTF-8: ${e}.`)
-  }
-
-  if (responseBody == null) {
-    console.log('responseBody is null. Skipping plugins and returning the response.')
-    return
-  }
-
   Promise.resolve().then(() => {
-    processOpenClientResponse(responseBody, response, env).catch((e) =>
+    processOpenClientResponse(bodyBytes, response, env).catch((e) =>
       console.error('Processing open client response failed: ', e)
     )
   })
+
+  return cloneFastlyResponse(bodyBytes, response)
 }
 
 function makeCacheEndpointRequest(receivedRequest: Request, routeMatches: RegExpMatchArray | undefined) {
