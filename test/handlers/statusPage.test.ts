@@ -39,13 +39,14 @@ describe('Status Page', () => {
     const response = await handleRequest(request)
 
     const responseText = await response.text()
+    console.log(responseText)
     const isAllSet = responseText.includes('All required configurations are set')
     const agentDownloadScriptPathError = responseText.includes(
-      '<strong>AGENT_SCRIPT_DOWNLOAD_PATH </strong> (REQUIRED) is not set'
+      '<strong>AGENT_SCRIPT_DOWNLOAD_PATH</strong> (REQUIRED) is not set.'
     )
-    const resultPathError = responseText.includes('<strong>GET_RESULT_PATH </strong> (REQUIRED) is not set')
-    const proxySecretError = responseText.includes('<strong>PROXY_SECRET </strong> (REQUIRED) is not set')
-    const decryptionKeyError = responseText.includes('<strong>DECRYPTION_KEY </strong> (REQUIRED) is not set')
+    const resultPathError = responseText.includes('<strong>GET_RESULT_PATH</strong> (REQUIRED) is not set')
+    const proxySecretError = responseText.includes('<strong>PROXY_SECRET</strong> (REQUIRED) is not set')
+    const decryptionKeyError = responseText.includes('<strong>DECRYPTION_KEY</strong> (REQUIRED) is not set')
 
     expect(isAllSet).toBe(false)
     expect(agentDownloadScriptPathError).toBe(true)
