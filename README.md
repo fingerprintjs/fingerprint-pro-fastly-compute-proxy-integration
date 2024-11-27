@@ -42,7 +42,7 @@ This is a quick overview of the installation setup. For detailed step-by-step in
    | ---------------------------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
    | AGENT_SCRIPT_DOWNLOAD_PATH   | z5kms2        | Random path segment for downloading the JavaScript agent.                                                                                                              |
    | GET_RESULT_PATH              | nocmjw        | Random path segment for Fingerprint identification requests.                                                                                                           |
-   | OPEN_CLIENT_RESPONSE_PLUGINS_ENABLED | false         | Set to `true` if you have [Open client response](https://dev.fingerprint.com/docs/open-client-response) enabled for your Fingerprint application. Defaults to `false`. |
+   | OPEN_CLIENT_RESPONSE_PLUGINS_ENABLED | false         | Set to `true` if you have [Open client response](https://dev.fingerprint.com/docs/open-client-response) enabled for your Fingerprint workspace. Defaults to `false`. |
 
 4. [Create a Secret store](https://docs.fastly.com/en/guides/working-with-secret-stores#creating-a-secret-store) named `Fingerprint_Compute_Secret_Store_<SERVICE_ID>`, where the suffix is your proxy integration's [Compute Service ID](https://docs.fastly.com/en/guides/about-services). Add your proxy secret:
 
