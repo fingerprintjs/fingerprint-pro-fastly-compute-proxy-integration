@@ -81,7 +81,7 @@ By default, the service package provided in releases assumes the following names
 To use a custom name prefix for both stores, use the `STORE_NAME_PREFIX` environment variable to build a custom service package:
 
 ```shell=
-STORE_NAME_PREFIX=CustomName pnpm run build
+STORE_NAME_PREFIX=CustomName fastly compute build
 ```
 
 Your custom built package in `pkg/fingerprint-fastly-compute-proxy-integration.tar.gz` will use your custom prefix in store names like:
