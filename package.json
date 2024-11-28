@@ -39,11 +39,10 @@
     "cookie": "0.7.0"
   },
   "scripts": {
-    "prebuild": "ts-node build.ts",
     "assemble": "js-compute-runtime build/index.js bin/main.wasm",
     "pack": "fastly compute pack --wasm-binary=./bin/main.wasm && mv pkg/package.tar.gz pkg/fingerprint-fastly-compute-proxy-integration.tar.gz",
-    "build": "pnpm run prebuild && fastly compute metadata --enable && pnpm run assemble && pnpm run pack",
-    "artifact:create": "fastly compute metadata --enable && fastly compute build",
+    "build": "ts-node build.ts && fastly compute metadata --enable && pnpm run assemble && pnpm run pack",
+    "artifact:create": "fastly compute build",
     "deploy": "fastly compute publish",
     "dev": "fastly compute serve",
     "prepare": "husky",
