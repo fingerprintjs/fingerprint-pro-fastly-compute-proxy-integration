@@ -17,7 +17,7 @@ import {
 } from '../env'
 import packageJson from '../../package.json'
 import { env } from 'fastly:env'
-import { getBuiltinKVStore } from '../utils/getStore'
+import { getBuiltinKVStore, getNamesForStores } from '../utils/getStore'
 import { Backend } from 'fastly:backend'
 
 function generateNonce() {
@@ -171,7 +171,8 @@ function buildConfigurationMessage(config: ConfigurationStatus, env: Integration
 async function buildKVStoreCheckMessage(): Promise<string> {
   const isKVStoreAvailable = await checkKVStoreAvailability()
   if (!isKVStoreAvailable) {
-    return `<span>⚠️Your ${openClientResponseVarName} and ${saveToKvStorePluginEnabledVarName} variables are set and enabled, but we couldn't reach your KVStore. Your should create a KVStore with proper name and link to your service.</span>`
+    const { kvStoreName } = getNamesForStores()
+    return `<span>⚠️Your ${openClientResponseVarName} and ${saveToKvStorePluginEnabledVarName} variables are set and enabled, but we couldn't reach your KVStore. Your should create a KVStore with name <code>${kvStoreName}</code> and link to your service.</span>`
   }
   return ''
 }
