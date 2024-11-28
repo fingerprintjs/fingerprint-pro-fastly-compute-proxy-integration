@@ -1,3 +1,18 @@
+## [0.3.0-rc.5](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/compare/v0.3.0-rc.4...v0.3.0-rc.5) (2024-11-28)
+
+
+### Features
+
+* add backend checks to status page ([62260ae](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/commit/62260aeb5f5fa7c10aabb7729cf4d09f5c55f087))
+* improve status page ([d1733b5](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/commit/d1733b5768f8c1eaf95f041c2c92ff24b019c36b))
+
+
+### Bug Fixes
+
+* build command missing metadata ([3d77697](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/commit/3d776976c72b3490b90aff4729f56170fbe2f9a7))
+* github ci not running prebuild ([9957582](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/commit/9957582dc9ec64781ea718b3946fa9c7e34ccb9b))
+* show status page correct store name for kv storage ([5df22d3](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/commit/5df22d368c5a7f38b46ffbc7e71a65d8d0d6cb08))
+
 ## [0.3.0-rc.4](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/compare/v0.3.0-rc.3...v0.3.0-rc.4) (2024-11-26)
 
 
