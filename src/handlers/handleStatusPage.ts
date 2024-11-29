@@ -210,7 +210,7 @@ async function createOpenClientResponseInformationElement(env: IntegrationEnv): 
       isSet: isDecryptionKeySet(env),
       required: false,
       message:
-        'Open client response plugins are not working correctly. This is required if you want to use open client response plugins.',
+        'Open client response plugins are not working correctly. This is required if you want to use Open client response plugins.',
     },
     {
       label: saveToKvStorePluginEnabledVarName,
