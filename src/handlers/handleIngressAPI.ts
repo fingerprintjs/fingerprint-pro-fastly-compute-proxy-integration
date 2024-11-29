@@ -49,7 +49,10 @@ async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv)
   const bodyBytes = await response.arrayBuffer()
   Promise.resolve().then(() => {
     processOpenClientResponse(bodyBytes, response, env).catch((e) =>
-      console.error('Processing open client response failed: ', e)
+      console.error(
+        'Failed to parse identification response. Make sure Open Client Response is enabled for your Fingerprint workspace: ',
+        e
+      )
     )
   })
 
