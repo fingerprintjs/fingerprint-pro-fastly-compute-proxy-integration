@@ -1,3 +1,10 @@
+## [0.3.0-rc.6](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/compare/v0.3.0-rc.5...v0.3.0-rc.6) (2024-11-29)
+
+
+### Bug Fixes
+
+* more clear error message ([74a1a34](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/commit/74a1a347f8d3ae423b74eed9007d54150a927635))
+
 ## [0.3.0-rc.5](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/compare/v0.3.0-rc.4...v0.3.0-rc.5) (2024-11-28)
 
 
