@@ -217,6 +217,7 @@ async function createOpenClientResponseInformationElement(env: IntegrationEnv): 
       isSet: isSaveToKvStorePluginEnabledSet(env),
       required: false,
       value: env.SAVE_TO_KV_STORE_PLUGIN_ENABLED,
+      showValue: true,
     },
   ]
 
