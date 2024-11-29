@@ -83,7 +83,7 @@ function getBackendsInformation(): string {
     information +=
       '<li>⚠️ Your integration is missing backend hosts for region support. Please add at least one of the backends "api.fpjs.io", "eu.api.fpjs.io", or "ap.api.fpjs.io"</li>'
   } else {
-    information += `<li>ℹ️ Integration is configured for these regions: <strong>${supportedRegions.join(' ,')}</strong></li>`
+    information += `<li>ℹ️ Integration is configured for these regions: <strong>${supportedRegions.join(', ')}</strong></li>`
   }
 
   return information
