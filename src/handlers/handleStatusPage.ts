@@ -81,9 +81,9 @@ function getBackendsInformation(): string {
   }
   if (supportedRegions.length === 0) {
     information +=
-      '<li>⚠️ Your integration is missing backend hosts for region support. Please add at least one of the backends "api.fpjs.io", "eu.api.fpjs.io", or "ap.api.fpjs.io"</li>'
+      '<li>⚠️ Your integration is missing backend hosts for <a href="https://dev.fingerprint.com/docs/regions">region support</a>. Please add at least one of the backends "api.fpjs.io", "eu.api.fpjs.io", or "ap.api.fpjs.io"</li>'
   } else {
-    information += `<li>ℹ️ Integration is configured for these regions: <strong>${supportedRegions.join(', ')}</strong></li>`
+    information += `<li>ℹ️ Integration is configured for these <a href="https://dev.fingerprint.com/docs/regions">regions</a>: <strong>${supportedRegions.join(', ')}</strong></li>`
   }
 
   return information
@@ -123,7 +123,7 @@ async function checkKVStoreAvailability() {
 function createContactInformationElement(): string {
   return `
   <p>
-  ❓Please reach out our support via <a href='mailto:support@fingerprint.com'>support@fingerprint.com</a> if you have any issues.
+  ❓Please <a href="https://fingerprint.com/support">reach out to our support team</a> if you have any issues.
   </p>
   `
 }
@@ -222,7 +222,7 @@ async function createOpenClientResponseInformationElement(env: IntegrationEnv): 
   ]
 
   let result = ''
-  result += `<p style="display: block">🔌 Open client response configuration values:<br>(Optional, only relevant if you are using Open client response plugins)</p>`
+  result += `<p style="display: block">🔌 Open client response configuration values:<br>(Optional, only relevant if you are using <a href="https://dev.fingerprint.com/docs/using-open-client-response-with-fastly-compute-proxy-integration-plugins">Open client response plugins</a>)</p>`
 
   result += '<ul>'
   for (const config of configurations) {
