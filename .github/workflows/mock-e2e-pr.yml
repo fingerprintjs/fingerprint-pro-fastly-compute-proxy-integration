@@ -75,7 +75,7 @@ jobs:
       - name: Run test
         run: pnpm test:mock-e2e
         env:
-          TEST_DOMAIN: 'https://fpjs-fastly-${{steps.extract-branch.outputs.SUBDOMAIN}}.edgecompute.app'
+          TEST_DOMAIN: 'https://fingerprint-${{steps.extract-branch.outputs.SUBDOMAIN}}.edgecompute.app'
           INTEGRATION_PATH: ${{secrets.INTEGRATION_PATH}}
           RESULT_PATH: ${{secrets.RESULT_PATH}}
           AGENT_PATH: ${{secrets.AGENT_PATH}}

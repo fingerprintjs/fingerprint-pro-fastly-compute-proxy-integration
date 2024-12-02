@@ -71,7 +71,7 @@ async function createDomain(domain: string, serviceId: string) {
   })
   await domainClient.createDomain({
     version_id: 1,
-    name: `fpjs-fastly-${domain.split('.')[0]}.edgecompute.app`,
+    name: `fingerprint-${domain.split('.')[0]}.edgecompute.app`,
     service_id: serviceId,
   })
 }
