@@ -71,13 +71,6 @@ This is a quick overview of the installation setup. For detailed step-by-step in
 
 See the [Fastly Compute proxy integration guide](https://dev.fingerprint.com/docs/fastly-compute-proxy-integration#step-4-configure-the-fingerprint-client-agent-to-use-your-service) in our documentation for more details.
 
-### Using custom store names
-
-By default, the service package provided in releases assumes the following names for the Config store and Secret Store:
-
-* `Fingerprint_Compute_Config_Store_<SERVICE_ID>`
-* `Fingerprint_Compute_Secret_Store_<SERVICE_ID>`
-
 ## Feedback and support
 
 Please reach out to our [Customer Success team](https://fingerprint.com/support/) if run into any issues with the integration.
