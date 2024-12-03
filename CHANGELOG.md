@@ -1,3 +1,18 @@
+## [0.3.0-rc.7](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/compare/v0.3.0-rc.6...v0.3.0-rc.7) (2024-12-03)
+
+
+### Features
+
+* add links to the status page ([bed4323](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/commit/bed4323b666ff30cc2451eda6dfb27d139fa1421))
+* restructure status page ([b8ead8f](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/commit/b8ead8f28f10384ff9bff0484bae0cd6cdfe2563))
+* status page shows save_to_kvstore_plugin value ([4eb3aaa](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/commit/4eb3aaae7fd0fb39119456830f06219f4a585c98))
+
+
+### Bug Fixes
+
+* status page wording ([468fd54](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/commit/468fd54f1e786c1d2177e827e526059eda9b9b37))
+* undefined message for status page ([ef643f4](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/commit/ef643f429427f452424a427a53a849e227dcc12e))
+
 ## [0.3.0-rc.6](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/compare/v0.3.0-rc.5...v0.3.0-rc.6) (2024-11-29)
 
 
