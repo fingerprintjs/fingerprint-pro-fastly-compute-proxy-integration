@@ -14,6 +14,7 @@ import {
   saveToKvStorePluginEnabledVarName,
   isSaveToKvStorePluginEnabled,
   isSaveToKvStorePluginEnabledSet,
+  getDecryptionKey,
 } from '../env'
 import packageJson from '../../package.json'
 import { env } from 'fastly:env'
@@ -42,51 +43,50 @@ function buildHeaders(styleNonce: string): Headers {
 
 function createVersionElement(): string {
   const fastlyServiceVersion = env('FASTLY_SERVICE_VERSION')
-  return `
-  <span>
-  ℹ️ Integration version: ${packageJson.version}
-  </span>
-  <span>
-  ℹ️ Fastly Compute Service version: ${fastlyServiceVersion}
-  </span>
+  let result = ''
+  result += '<ul>'
+  result += `
+    <li>
+    ℹ️ Integration version: <strong>${packageJson.version}</strong>
+    </li>
+    <li>
+    ℹ️ Fastly Compute Service version: <strong>${fastlyServiceVersion}</strong>
+    </li>
   `
+
+  result += getBackendsInformation()
+  result += '</ul>'
+
+  return result
 }
 
-function createBackendCheckElements(): string {
-  const resultApi = Backend.exists('api.fpjs.io')
-  const europeResultApi = Backend.exists('eu.api.fpjs.io')
-  const asiaResultApi = Backend.exists('ap.api.fpjs.io')
-  const fpcdnApi = Backend.exists('fpcdn.io')
-
-  if (resultApi && europeResultApi && asiaResultApi && fpcdnApi) {
-    return '<span>✅ Integration setup supports all ingress regions and agent download endpoint.</span>'
+function getBackendsInformation(): string {
+  let information = ''
+  if (!Backend.exists('fpcdn.io')) {
+    information += '<li>⚠️ Your integration is missing "fpcdn.io" backend host.</li>'
   }
 
-  let result = ''
-
-  if (!fpcdnApi) {
-    result += '<span>⚠️ Your integration is missing "fpcdn.io" backend host.</span>'
+  const usResultBackend = Backend.exists('api.fpjs.io')
+  const euResultBackend = Backend.exists('eu.api.fpjs.io')
+  const apResultBackend = Backend.exists('ap.api.fpjs.io')
+  const supportedRegions = []
+  if (usResultBackend) {
+    supportedRegions.push('US')
   }
-
-  if (!resultApi && !europeResultApi && !asiaResultApi) {
-    result +=
-      '<span>⚠️ At least one of the backends "api.fpjs.io", "eu.api.fpjs.io", or "ap.api.fpjs.io" must exist.</span>'
+  if (euResultBackend) {
+    supportedRegions.push('EU')
+  }
+  if (apResultBackend) {
+    supportedRegions.push('AP')
+  }
+  if (supportedRegions.length === 0) {
+    information +=
+      '<li>⚠️ Your integration is missing backend hosts for <a href="https://dev.fingerprint.com/docs/regions">region support</a>. Please add at least one of the backends "api.fpjs.io", "eu.api.fpjs.io", or "ap.api.fpjs.io"</li>'
   } else {
-    const supportedRegions = []
-    if (resultApi) {
-      supportedRegions.push('US')
-    }
-    if (europeResultApi) {
-      supportedRegions.push('EU')
-    }
-    if (asiaResultApi) {
-      supportedRegions.push('AP')
-    }
-    if (supportedRegions.length > 0) {
-      result += `<span>⚠️ Integration is configured for these regions only: ${supportedRegions.join(', ')}.</span>`
-    }
+    information += `<li>ℹ️ Integration is configured for these <a href="https://dev.fingerprint.com/docs/regions">regions</a>: <strong>${supportedRegions.join(', ')}</strong></li>`
   }
-  return result
+
+  return information
 }
 
 function isValidBase64(str: string | null | undefined): boolean {
@@ -122,59 +122,34 @@ async function checkKVStoreAvailability() {
 
 function createContactInformationElement(): string {
   return `
-  <span>
-  ❓Please reach out our support via <a href='mailto:support@fingerprint.com'>support@fingerprint.com</a> if you have any issues
-  </span>
+  <p>
+  ❓Please <a href="https://fingerprint.com/support">reach out to our support team</a> if you have any issues.
+  </p>
   `
 }
 
 function buildConfigurationMessage(config: ConfigurationStatus, env: IntegrationEnv): string {
-  const isDecryptionKeyAValidBase64 = isValidBase64(env.DECRYPTION_KEY)
-  const { isSet, label, required, value } = config
+  const { isSet, label, required, value, showValue } = config
 
-  let result = `<span>${isSet ? '✅' : '⚠️'} <strong>${label}</strong> (${required ? 'REQUIRED' : 'OPTIONAL'}) is ${isSet ? '' : 'not '}set.</span>`
-
-  if (required && !isSet && config.message) {
-    result += `<span>${config.message}</span>`
+  let message = isSet ? '' : config.message
+  if (label === decryptionKeyVarName && isSet) {
+    const isDecryptionKeyAValidBase64 = isValidBase64(getDecryptionKey(env))
+    if (!isDecryptionKeyAValidBase64) {
+      message += `Invalid value provided ⚠️. Please copy and paste the correct value from the dashboard.`
+    }
   }
 
-  if (label === openClientResponseVarName) {
-    result +=
-      value === 'false'
-        ? '<span>Open Client Response feature is <b>not</b> expected to work for your integration.</span>'
-        : ''
-  }
-
-  if (label === decryptionKeyVarName && isSet && !isDecryptionKeyAValidBase64) {
-    result += `<span>⚠️Your ${decryptionKeyVarName} is invalid. Please copy and paste the correct ${decryptionKeyVarName} from the dashboard.</span>`
-  }
-
-  if (
-    label === saveToKvStorePluginEnabledVarName &&
-    isSaveToKvStorePluginEnabled(env) &&
-    !isDecryptionKeyAValidBase64
-  ) {
-    result += `<span>⚠️Your ${saveToKvStorePluginEnabledVarName} is set & enabled but decryption is not correct, requests will not be saved in your KV Store</span>`
-  }
-
-  if (
-    label === saveToKvStorePluginEnabledVarName &&
-    isSaveToKvStorePluginEnabled(env) &&
-    !isOpenClientResponseEnabled(env)
-  ) {
-    result += `<span>⚠️ The built-in plugin for saving results to the KV Store is enabled, but the ${openClientResponseVarName} is not set to true, so this plugin won't work.</span>`
-  }
-
-  return `<span>${result}</span>`
+  return `<li><code>${label}</code> (${required ? 'Required' : 'Optional'}) is ${isSet ? `${showValue ? `<code>${value}</code>` : 'set'} ✅` : `${required ? 'missing ❌' : 'not set ⚠️'}`}. ${message ?? ''}</li>`
 }
 
 async function buildKVStoreCheckMessage(): Promise<string> {
   const isKVStoreAvailable = await checkKVStoreAvailability()
-  if (!isKVStoreAvailable) {
-    const { kvStoreName } = getNamesForStores()
-    return `<span>⚠️Your ${openClientResponseVarName} and ${saveToKvStorePluginEnabledVarName} variables are set and enabled, but we couldn't reach your KVStore. Your should create a KVStore with name <code>${kvStoreName}</code> and link to your service.</span>`
+  if (isKVStoreAvailable) {
+    return ''
   }
-  return ''
+
+  const { kvStoreName } = getNamesForStores()
+  return `⚠️You have <code>${saveToKvStorePluginEnabledVarName}</code> enabled, but we couldn't reach your KVStore named <code>${kvStoreName}</code>. <code>${saveToKvStorePluginEnabledVarName}</code> related plugin is not working correctly.`
 }
 
 type ConfigurationStatus = {
@@ -183,8 +158,9 @@ type ConfigurationStatus = {
   required: boolean
   message?: string
   value?: string | null
+  showValue?: boolean
 }
-async function createEnvVarsInformationElement(env: IntegrationEnv): Promise<string> {
+function createEnvVarsInformationElement(env: IntegrationEnv): string {
   const incorrectConfigurationMessage = 'Your integration is not working correctly.'
   const configurations: ConfigurationStatus[] = [
     {
@@ -205,47 +181,61 @@ async function createEnvVarsInformationElement(env: IntegrationEnv): Promise<str
       required: true,
       message: incorrectConfigurationMessage,
     },
-    {
-      label: decryptionKeyVarName,
-      isSet: isDecryptionKeySet(env),
-      required: isOpenClientResponseEnabled(env),
-      message: incorrectConfigurationMessage,
-    },
+  ]
+
+  let result = ''
+  result += '<p>🛠️ Your integration’s configuration values:</p>'
+
+  result += '<ul>'
+  for (const config of configurations) {
+    result += buildConfigurationMessage(config, env)
+  }
+  result += '</ul>'
+
+  return result
+}
+
+async function createOpenClientResponseInformationElement(env: IntegrationEnv): Promise<string> {
+  const configurations: ConfigurationStatus[] = [
     {
       label: openClientResponseVarName,
       isSet: isOpenClientResponseSet(env),
       required: false,
       value: env.OPEN_CLIENT_RESPONSE_PLUGINS_ENABLED,
+      showValue: true,
+      message: 'Open client response plugins are disabled.',
+    },
+    {
+      label: decryptionKeyVarName,
+      isSet: isDecryptionKeySet(env),
+      required: false,
       message:
-        "Your integration will work without the 'Open Client Response' feature. If you didn't set it intentionally, you can ignore this warning.",
+        'Open client response plugins are not working correctly. This is required if you want to use Open client response plugins.',
     },
     {
       label: saveToKvStorePluginEnabledVarName,
       isSet: isSaveToKvStorePluginEnabledSet(env),
       required: false,
       value: env.SAVE_TO_KV_STORE_PLUGIN_ENABLED,
-      message:
-        "Built-in saving requests to KV Storage plugin is not enabled. If you didn't set it intentionally, you can ignore this warning.",
+      showValue: true,
     },
   ]
 
-  const isAllVarsAvailable = configurations.every((t) => !t.required || t.isSet)
-
   let result = ''
+  result += `<p style="display: block">🔌 Open client response configuration values:<br>(Optional, only relevant if you are using <a href="https://dev.fingerprint.com/docs/using-open-client-response-with-fastly-compute-proxy-integration-plugins">Open client response plugins</a>)</p>`
 
-  if (isAllVarsAvailable) {
-    result += '<span>✅ All required configuration values are set</span>'
-  }
-
-  result += '<span>Your integration’s configuration values:</span>'
-
+  result += '<ul>'
   for (const config of configurations) {
     result += buildConfigurationMessage(config, env)
   }
 
   if (isOpenClientResponseEnabled(env) && isSaveToKvStorePluginEnabled(env)) {
-    result += await buildKVStoreCheckMessage()
+    const errorMessage = await buildKVStoreCheckMessage()
+    if (errorMessage) {
+      result += `<li>${errorMessage}</li>`
+    }
   }
+  result += '</ul>'
 
   return result
 }
@@ -258,26 +248,46 @@ async function buildBody(env: IntegrationEnv, styleNonce: string): Promise<strin
     <title>Fingerprint Pro Fastly Compute Integration</title>
     <link rel='icon' type='image/x-icon' href='https://fingerprint.com/img/favicon.ico'>
     <style nonce='${styleNonce}'>
-      h1, span {
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;     
+      }
+      div {
+        width: 60%;
+        max-width: 800px;
+      }
+      h1 {
         display: block;
         padding-top: 1em;
         padding-bottom: 1em;
-        text-align: center;
+      }
+      p {
+        padding-top: 1em;
+      }
+      code {
+        background:rgba(135,131,120,.15);
+        color:#EB5757;
+        border-radius:4px;
+        font-size:85%;
+        padding:0.2em 0.4em
       }
     </style>
   </head>
   <body>
+  <div>
     <h1>Fingerprint Pro Fastly Compute Integration</h1>
   `
 
-  body += `<span>🎉 Your Fastly Integration is deployed</span>`
+  body += `<p>🎉 Your Fastly Integration is deployed!</p>`
 
   body += createVersionElement()
-  body += await createEnvVarsInformationElement(env)
-  body += createBackendCheckElements()
+  body += createEnvVarsInformationElement(env)
   body += createContactInformationElement()
+  body += await createOpenClientResponseInformationElement(env)
 
-  body += `  
+  body += `
+  </div>  
   </body>
   </html>
   `
