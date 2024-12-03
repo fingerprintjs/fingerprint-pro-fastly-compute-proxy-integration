@@ -78,18 +78,6 @@ By default, the service package provided in releases assumes the following names
 * `Fingerprint_Compute_Config_Store_<SERVICE_ID>`
 * `Fingerprint_Compute_Secret_Store_<SERVICE_ID>`
 
-To use a custom name prefix for both stores, use the `STORE_NAME_PREFIX` environment variable to build a custom service package:
-
-```shell=
-STORE_NAME_PREFIX=CustomName fastly compute build
-```
-
-Your custom built package in `pkg/fingerprint-fastly-compute-proxy-integration.tar.gz` will use your custom prefix in store names like:
-
-* `CustomName_Config_Store_<SERVICE_ID>`
-* `CustomName_Secret_Store_<SERVICE_ID>`
-
-
 ## Feedback and support
 
 Please reach out to our [Customer Success team](https://fingerprint.com/support/) if run into any issues with the integration.
