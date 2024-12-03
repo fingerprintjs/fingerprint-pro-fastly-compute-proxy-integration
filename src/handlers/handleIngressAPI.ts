@@ -39,17 +39,24 @@ async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv)
   }
 
   console.log('Plugin system for Open Client Response is enabled')
-  if (response.status >= 200 && response.status < 300) {
-    const responseBody = await response.text()
-    Promise.resolve().then(() => {
-      processOpenClientResponse(responseBody, response, env).catch((e) =>
-        console.error('Processing open client response failed: ', e)
-      )
-    })
-    return cloneFastlyResponse(responseBody, response)
+  if (response.status < 200 || response.status > 299) {
+    console.log(
+      `Response status is non-successful (HTTP ${response.status}). Skipping plugins and returning the response.`
+    )
+    return response
   }
 
-  return response
+  const bodyBytes = await response.arrayBuffer()
+  Promise.resolve().then(() => {
+    processOpenClientResponse(bodyBytes, response, env).catch((e) =>
+      console.error(
+        'Failed to parse identification response. Make sure Open Client Response is enabled for your Fingerprint workspace: ',
+        e
+      )
+    )
+  })
+
+  return cloneFastlyResponse(bodyBytes, response)
 }
 
 function makeCacheEndpointRequest(receivedRequest: Request, routeMatches: RegExpMatchArray | undefined) {
@@ -73,7 +80,7 @@ export async function handleIngressAPI(
     try {
       return await makeCacheEndpointRequest(request, routeMatches)
     } catch (e) {
-      return createFallbackErrorResponse(e)
+      return createFallbackErrorResponse(request, e)
     }
   }
 

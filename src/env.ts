@@ -1,9 +1,12 @@
+import { getConfigStore, getSecretStore } from './utils/getStore'
+
 export type IntegrationEnv = {
   AGENT_SCRIPT_DOWNLOAD_PATH: string | null
   GET_RESULT_PATH: string | null
   PROXY_SECRET: string | null
   OPEN_CLIENT_RESPONSE_PLUGINS_ENABLED: string | null
   DECRYPTION_KEY: string | null
+  SAVE_TO_KV_STORE_PLUGIN_ENABLED: string | null
 }
 
 const Defaults: IntegrationEnv = {
@@ -12,6 +15,7 @@ const Defaults: IntegrationEnv = {
   PROXY_SECRET: null,
   OPEN_CLIENT_RESPONSE_PLUGINS_ENABLED: 'false',
   DECRYPTION_KEY: null,
+  SAVE_TO_KV_STORE_PLUGIN_ENABLED: 'false',
 }
 
 function getVarOrDefault(
@@ -62,6 +66,13 @@ export const isOpenClientResponseSet = (env: IntegrationEnv) =>
 export const isOpenClientResponseEnabled = (env: IntegrationEnv) =>
   env[openClientResponseVarName]?.toLowerCase() === 'true'
 
+export const saveToKvStorePluginEnabledVarName = 'SAVE_TO_KV_STORE_PLUGIN_ENABLED'
+export const isSaveToKvStorePluginEnabledSet = (env: IntegrationEnv) =>
+  env.SAVE_TO_KV_STORE_PLUGIN_ENABLED === 'true' || env.SAVE_TO_KV_STORE_PLUGIN_ENABLED === 'false'
+
+export const isSaveToKvStorePluginEnabled = (env: IntegrationEnv) =>
+  env[saveToKvStorePluginEnabledVarName]?.toLowerCase() === 'true'
+
 export function getProxySecret(env: IntegrationEnv): string | null {
   return getProxySecretVar(env)
 }
@@ -72,4 +83,29 @@ export function getDecryptionKey(env: IntegrationEnv): string | null {
 
 export function getStatusPagePath(): string {
   return `/status`
+}
+
+export async function getEnvObject(): Promise<IntegrationEnv> {
+  let configStore
+  try {
+    configStore = getConfigStore()
+  } catch (e) {
+    console.error(e)
+  }
+
+  let secretStore
+  try {
+    secretStore = getSecretStore()
+  } catch (e) {
+    console.error(e)
+  }
+
+  return {
+    AGENT_SCRIPT_DOWNLOAD_PATH: configStore?.get(agentScriptDownloadPathVarName) ?? null,
+    GET_RESULT_PATH: configStore?.get(getResultPathVarName) ?? null,
+    OPEN_CLIENT_RESPONSE_PLUGINS_ENABLED: configStore?.get(openClientResponseVarName) ?? null,
+    SAVE_TO_KV_STORE_PLUGIN_ENABLED: configStore?.get(saveToKvStorePluginEnabledVarName) ?? null,
+    PROXY_SECRET: (await secretStore?.get(proxySecretVarName))?.plaintext() ?? null,
+    DECRYPTION_KEY: (await secretStore?.get(decryptionKeyVarName))?.plaintext() ?? null,
+  }
 }

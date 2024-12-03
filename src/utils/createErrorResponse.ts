@@ -55,18 +55,25 @@ export function createErrorResponseForIngress(request: Request, error: string | 
     requestId: generateRequestId(),
     products: {},
   }
-  const requestOrigin = request.headers.get('origin') || ''
+  const requestOrigin = request.headers.get('origin') || '*'
   const responseHeaders: HeadersInit = {
     'Access-Control-Allow-Origin': requestOrigin,
     'Access-Control-Allow-Credentials': 'true',
     'content-type': 'application/json',
   }
-  console.log(`Error occurred for ingress request, reason: ${reason}`)
+  console.log(`Error occurred for ingress request, reason: `, reason)
   return new Response(JSON.stringify(responseBody), { status: 500, headers: responseHeaders })
 }
 
-export function createFallbackErrorResponse(error: string | Error | unknown): Response {
-  const responseBody = { error: errorToString(error) }
-  console.log(`Error occurred, reason: ${responseBody}`)
-  return new Response(JSON.stringify(responseBody), { status: 500, headers: { 'content-type': 'application/json' } })
+export function createFallbackErrorResponse(request: Request, error: string | Error | unknown): Response {
+  const reason = errorToString(error)
+  const responseBody = { error: reason }
+  console.log(`Error occurred, reason:`, reason)
+  const requestOrigin = request.headers.get('origin') || '*'
+  const responseHeaders: HeadersInit = {
+    'Access-Control-Allow-Origin': requestOrigin,
+    'Access-Control-Allow-Credentials': 'true',
+    'content-type': 'application/json',
+  }
+  return new Response(JSON.stringify(responseBody), { status: 500, headers: responseHeaders })
 }

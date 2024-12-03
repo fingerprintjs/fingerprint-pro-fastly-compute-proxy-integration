@@ -42,7 +42,7 @@ This is a quick overview of the installation setup. For detailed step-by-step in
    | ---------------------------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
    | AGENT_SCRIPT_DOWNLOAD_PATH   | z5kms2        | Random path segment for downloading the JavaScript agent.                                                                                                              |
    | GET_RESULT_PATH              | nocmjw        | Random path segment for Fingerprint identification requests.                                                                                                           |
-   | OPEN_CLIENT_RESPONSE_PLUGINS_ENABLED | false         | Set to `true` if you have [Open client response](https://dev.fingerprint.com/docs/open-client-response) enabled for your Fingerprint application. Defaults to `false`. |
+   | OPEN_CLIENT_RESPONSE_PLUGINS_ENABLED | false         | Set to `true` if you have [Open client response](https://dev.fingerprint.com/docs/open-client-response) enabled for your Fingerprint workspace. Defaults to `false`. |
 
 4. [Create a Secret store](https://docs.fastly.com/en/guides/working-with-secret-stores#creating-a-secret-store) named `Fingerprint_Compute_Secret_Store_<SERVICE_ID>`, where the suffix is your proxy integration's [Compute Service ID](https://docs.fastly.com/en/guides/about-services). Add your proxy secret:
 
@@ -70,25 +70,6 @@ This is a quick overview of the installation setup. For detailed step-by-step in
    ```
 
 See the [Fastly Compute proxy integration guide](https://dev.fingerprint.com/docs/fastly-compute-proxy-integration#step-4-configure-the-fingerprint-client-agent-to-use-your-service) in our documentation for more details.
-
-### Using custom store names
-
-By default, the service package provided in releases assumes the following names for the Config store and Secret Store:
-
-* `Fingerprint_Compute_Config_Store_<SERVICE_ID>`
-* `Fingerprint_Compute_Secret_Store_<SERVICE_ID>`
-
-To use a custom name prefix for both stores, use the `STORE_NAME_PREFIX` environment variable to build a custom service package:
-
-```shell=
-STORE_NAME_PREFIX=CustomName pnpm run build
-```
-
-Your custom built package in `pkg/fingerprint-fastly-compute-proxy-integration.tar.gz` will use your custom prefix in store names like:
-
-* `CustomName_Config_Store_<SERVICE_ID>`
-* `CustomName_Secret_Store_<SERVICE_ID>`
-
 
 ## Feedback and support
 
