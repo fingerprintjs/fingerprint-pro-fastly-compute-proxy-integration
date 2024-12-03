@@ -21,6 +21,7 @@ describe('Status Page', () => {
     expect(response.headers.get('Content-Type')).toBe('text/html')
   })
 
+  // todo replace this with up-to-date test cases
   it.skip('should show error for undefined required configurations', async () => {
     const config = new ConfigStore('Fingerprint')
     const secret = new SecretStore('Fingerprint')
@@ -54,6 +55,7 @@ describe('Status Page', () => {
     expect(decryptionKeyError).toBe(true)
   })
 
+  // todo replace this with up-to-date test cases
   it.skip('should show correctly setup env', async () => {
     const config = new ConfigStore('Fingerprint')
     // @ts-ignore
@@ -90,6 +92,7 @@ describe('Status Page', () => {
     expect(hasNonceTag).toBe(true)
   })
 
+  // todo replace this with up-to-date test cases
   it.skip('should show correct integration version', async () => {
     const version = packageJson.version
     const pattern = /Integration version: (.*)/g
