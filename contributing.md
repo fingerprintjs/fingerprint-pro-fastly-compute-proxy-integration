@@ -22,7 +22,12 @@ For proposing changes, use the standard [pull request approach](https://docs.git
 2. Run `pnpm build` to compile the project and assemble the WebAssembly output.
 3. The build artifact is located in the `bin/main.wasm` file, which will be deployed to Fastly.
 
-### Custom Store Name Prefix
+### Using custom store names
+
+By default, the service package provided in releases assumes the following names for the Config store and Secret Store:
+
+* `Fingerprint_Compute_Config_Store_<SERVICE_ID>`
+* `Fingerprint_Compute_Secret_Store_<SERVICE_ID>`
 
 To use a custom name prefix for both(Secret and Config) stores, use the `STORE_NAME_PREFIX` environment variable to build a custom service package:
 
