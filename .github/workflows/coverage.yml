@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - chore/coverage-report-fix
 
 jobs:
   coverage-report:
