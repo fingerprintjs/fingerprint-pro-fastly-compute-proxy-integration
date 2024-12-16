@@ -1,4 +1,4 @@
-import { getConfigStore, getSecretStore } from './utils/getStore'
+import { getBuiltinKVStore, getConfigStore, getSecretStore } from './utils/getStore'
 
 export type IntegrationEnv = {
   AGENT_SCRIPT_DOWNLOAD_PATH: string | null
@@ -83,6 +83,22 @@ export function getDecryptionKey(env: IntegrationEnv): string | null {
 
 export function getStatusPagePath(): string {
   return `/status`
+}
+
+export async function checkKVStoreAvailability() {
+  try {
+    const kvStore = getBuiltinKVStore()
+    const testKeyName = 'kvStoreCheck'
+    await kvStore.put(testKeyName, 'true')
+    const entry = await kvStore.get(testKeyName)
+    const value = await entry?.text()
+    await kvStore.delete(testKeyName)
+    return value === 'true'
+  } catch (e) {
+    console.error('Error checking KV store availability:')
+    console.error(e)
+    return false
+  }
 }
 
 export async function getEnvObject(): Promise<IntegrationEnv> {

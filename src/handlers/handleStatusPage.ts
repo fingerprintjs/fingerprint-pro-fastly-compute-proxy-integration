@@ -15,10 +15,11 @@ import {
   isSaveToKvStorePluginEnabled,
   isSaveToKvStorePluginEnabledSet,
   getDecryptionKey,
+  checkKVStoreAvailability,
 } from '../env'
 import packageJson from '../../package.json'
 import { env } from 'fastly:env'
-import { getBuiltinKVStore, getNamesForStores } from '../utils/getStore'
+import { getNamesForStores } from '../utils/getStore'
 import { Backend } from 'fastly:backend'
 
 function generateNonce() {
@@ -60,7 +61,7 @@ function createVersionElement(): string {
   return result
 }
 
-function getBackendsInformation(): string {
+export function getBackendsInformation(): string {
   let information = ''
   if (!Backend.exists('fpcdn.io')) {
     information += '<li>⚠️ Your integration is missing "fpcdn.io" backend host.</li>'
@@ -104,20 +105,6 @@ function isValidBase64(str: string | null | undefined): boolean {
 
   // Test against the Base64 pattern
   return base64Pattern.test(str)
-}
-
-async function checkKVStoreAvailability() {
-  try {
-    const kvStore = getBuiltinKVStore()
-    const testKeyName = 'kvStoreCheck'
-    await kvStore.put(testKeyName, 'true')
-    const entry = await kvStore.get(testKeyName)
-    const value = await entry?.text()
-    await kvStore.delete(testKeyName)
-    return value === 'true'
-  } catch (_) {
-    return false
-  }
 }
 
 function createContactInformationElement(): string {
