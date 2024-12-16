@@ -1,19 +1,45 @@
+import { beforeAll, beforeEach, describe, expect, it, jest } from '@jest/globals'
 import { makeRequest } from '../utils/makeRequest'
 import { handleRequest } from '../../src'
-import { expect } from '@jest/globals'
 import { ConfigStore } from 'fastly:config-store'
-import packageJson from '../../package.json'
 import { SecretStore } from 'fastly:secret-store'
+import packageJson from '../../package.json'
 import {
   agentScriptDownloadPathVarName,
   decryptionKeyVarName,
   getResultPathVarName,
   openClientResponseVarName,
   proxySecretVarName,
+  saveToKvStorePluginEnabledVarName,
 } from '../../src/env'
+import * as envFunctions from '../../src/env'
+import { Backend } from 'fastly:backend'
+import { getBackendsInformation } from '../../src/handlers/handleStatusPage'
 
 describe('Status Page', () => {
-  it('should return text/html with status 200', async () => {
+  let config: ConfigStore
+  let secret: SecretStore
+
+  beforeAll(() => {
+    config = new ConfigStore('Fingerprint')
+    secret = new SecretStore('Fingerprint')
+  })
+
+  beforeEach(() => {
+    jest.clearAllMocks()
+    // @ts-ignore
+    config.set(agentScriptDownloadPathVarName, null)
+    // @ts-ignore
+    config.set(getResultPathVarName, null)
+    // @ts-ignore
+    config.set(openClientResponseVarName, null)
+    // @ts-ignore
+    secret.set(proxySecretVarName, null)
+    // @ts-ignore
+    secret.set(decryptionKeyVarName, null)
+  })
+
+  it('should return text/html with status 200 for GET request', async () => {
     const request = makeRequest(new URL('https://test/status'))
     const response = await handleRequest(request)
 
@@ -21,95 +47,305 @@ describe('Status Page', () => {
     expect(response.headers.get('Content-Type')).toBe('text/html')
   })
 
-  // todo replace this with up-to-date test cases
-  it.skip('should show error for undefined required configurations', async () => {
-    const config = new ConfigStore('Fingerprint')
-    const secret = new SecretStore('Fingerprint')
-    // @ts-ignore
-    config.set(getResultPathVarName, null)
-    // @ts-ignore
-    config.set(agentScriptDownloadPathVarName, null)
-    // @ts-ignore
-    config.set(openClientResponseVarName, 'true')
-    // @ts-ignore
-    secret.set(proxySecretVarName, null)
-    // @ts-ignore
-    secret.set(decryptionKeyVarName, null)
-
-    const request = makeRequest(new URL('https://test/status'))
-    const response = await handleRequest(request)
-
-    const responseText = await response.text()
-    const isAllSet = responseText.includes('All required configurations are set')
-    const agentDownloadScriptPathError = responseText.includes(
-      '<strong>AGENT_SCRIPT_DOWNLOAD_PATH</strong> (REQUIRED) is not set.'
-    )
-    const resultPathError = responseText.includes('<strong>GET_RESULT_PATH</strong> (REQUIRED) is not set')
-    const proxySecretError = responseText.includes('<strong>PROXY_SECRET</strong> (REQUIRED) is not set')
-    const decryptionKeyError = responseText.includes('<strong>DECRYPTION_KEY</strong> (REQUIRED) is not set')
-
-    expect(isAllSet).toBe(false)
-    expect(agentDownloadScriptPathError).toBe(true)
-    expect(resultPathError).toBe(true)
-    expect(proxySecretError).toBe(true)
-    expect(decryptionKeyError).toBe(true)
-  })
-
-  // todo replace this with up-to-date test cases
-  it.skip('should show correctly setup env', async () => {
-    const config = new ConfigStore('Fingerprint')
-    // @ts-ignore
-    config.set('AGENT_SCRIPT_DOWNLOAD_PATH', 'download')
-    // @ts-ignore
-    config.set('GET_RESULT_PATH', 'result')
-    // @ts-ignore
-    config.set('OPEN_CLIENT_RESPONSE_PLUGINS_ENABLED', 'true')
-
-    const secretStore = new SecretStore('Fingerprint')
-    // @ts-ignore
-    secretStore.set('PROXY_SECRET', 'secret')
-    // @ts-ignore
-    secretStore.set('DECRYPTION_KEY', 'secret')
-
-    const request = makeRequest(new URL('https://test/status'))
-    const response = await handleRequest(request)
-
-    const responseText = await response.text()
-    const isAllSet = responseText.includes('All required configuration values are set')
-
-    expect(isAllSet).toBe(true)
-  })
-
-  it('should have style tag with nonce', async () => {
-    const pattern = /<style nonce='(.*)'>/g
-
-    const request = makeRequest(new URL('https://test/status'))
-    const response = await handleRequest(request)
-
-    const responseText = await response.text()
-    const hasNonceTag = pattern.test(responseText)
-
-    expect(hasNonceTag).toBe(true)
-  })
-
-  // todo replace this with up-to-date test cases
-  it.skip('should show correct integration version', async () => {
-    const version = packageJson.version
-    const pattern = /Integration version: (.*)/g
-
-    const request = makeRequest(new URL('https://test/status'))
-    const response = await handleRequest(request)
-
-    const responseText = await response.text()
-    const matches = pattern.exec(responseText)
-    const versionMatch = matches ? matches[1] : null
-    expect(versionMatch).toBe(version)
-  })
-
-  it('should return 405 when method is not get', async () => {
+  it('should return 405 when method is not GET', async () => {
     const request = makeRequest(new URL('https://test/status'), { method: 'POST' })
     const response = await handleRequest(request)
 
     expect(response.status).toBe(405)
+  })
+
+  it('should include style tag with nonce', async () => {
+    const request = makeRequest(new URL('https://test/status'))
+    const response = await handleRequest(request)
+
+    const responseText = await response.text()
+
+    const styleTagStart = responseText.indexOf('<style nonce=')
+    expect(styleTagStart).not.toBe(-1)
+
+    const nonceStart = responseText.indexOf("'", styleTagStart) + 1
+    const nonceEnd = responseText.indexOf("'", nonceStart)
+    const nonce = responseText.substring(nonceStart, nonceEnd)
+
+    expect(nonce.length).toBe(32)
+    expect(/^[a-zA-Z0-9+/=]+$/.test(nonce)).toBe(true)
+  })
+
+  it('should show correct integration version', async () => {
+    const request = makeRequest(new URL('https://test/status'))
+    const response = await handleRequest(request)
+
+    const responseText = await response.text()
+    expect(responseText).toContain(`Integration version: <strong>${packageJson.version}</strong>`)
+  })
+
+  it('should show errors for undefined required configurations', async () => {
+    const request = makeRequest(new URL('https://test/status'))
+    const response = await handleRequest(request)
+
+    const responseText = await response.text()
+    expect(responseText).toContain(
+      '<li><code>AGENT_SCRIPT_DOWNLOAD_PATH</code> (Required) is missing ❌. Your integration is not working correctly.</li>'
+    )
+    expect(responseText).toContain(
+      '<li><code>GET_RESULT_PATH</code> (Required) is missing ❌. Your integration is not working correctly.</li>'
+    )
+    expect(responseText).toContain(
+      '<li><code>PROXY_SECRET</code> (Required) is missing ❌. Your integration is not working correctly.</li>'
+    )
+    expect(responseText).toContain(
+      '<li><code>DECRYPTION_KEY</code> (Optional) is not set ⚠️. Open client response plugins are not working correctly. This is required if you want to use Open client response plugins.</li>'
+    )
+  })
+
+  it('should show correctly setup env when all required configurations are set', async () => {
+    // @ts-ignore
+    config.set(agentScriptDownloadPathVarName, 'download')
+    // @ts-ignore
+    config.set(getResultPathVarName, 'result')
+    // @ts-ignore
+    config.set(openClientResponseVarName, 'true')
+    // @ts-ignore
+    config.set(saveToKvStorePluginEnabledVarName, 'true')
+    // @ts-ignore
+    secret.set(proxySecretVarName, 'proxy_secret')
+    // @ts-ignore
+    secret.set(decryptionKeyVarName, 'ZGVjcnlwdGlvbl9rZXk=')
+
+    const request = makeRequest(new URL('https://test/status'))
+    const response = await handleRequest(request)
+
+    const responseText = await response.text()
+
+    expect(responseText).toContain('<li><code>AGENT_SCRIPT_DOWNLOAD_PATH</code> (Required) is set ✅. </li>')
+    expect(responseText).toContain('<li><code>GET_RESULT_PATH</code> (Required) is set ✅. </li>')
+    expect(responseText).toContain('<li><code>PROXY_SECRET</code> (Required) is set ✅. </li>')
+
+    expect(responseText).toContain(
+      '<li><code>OPEN_CLIENT_RESPONSE_PLUGINS_ENABLED</code> (Optional) is <code>true</code> ✅. </li>'
+    )
+    expect(responseText).toContain('<li><code>DECRYPTION_KEY</code> (Optional) is set ✅. </li>')
+    expect(responseText).toContain(
+      '<li><code>SAVE_TO_KV_STORE_PLUGIN_ENABLED</code> (Optional) is <code>true</code> ✅. </li>'
+    )
+
+    expect(responseText).not.toContain('is missing ❌')
+    expect(responseText).not.toContain('is not set ⚠️')
+    expect(responseText).not.toContain('Your integration is not working correctly')
+  })
+
+  it('should include correct Content-Security-Policy header', async () => {
+    const request = makeRequest(new URL('https://test/status'))
+    const response = await handleRequest(request)
+
+    const cspHeader = response.headers.get('Content-Security-Policy')
+    expect(cspHeader).toBeTruthy()
+
+    expect(cspHeader).toMatch(
+      /^default-src 'none'; img-src https:\/\/fingerprint\.com; style-src 'nonce-[A-Za-z0-9+/=]+'$/
+    )
+
+    const nonceMatch = cspHeader?.match(/style-src 'nonce-([A-Za-z0-9+/=]+)'/)
+    expect(nonceMatch).toBeTruthy()
+    expect(nonceMatch?.[1]).toBeTruthy()
+    expect(nonceMatch?.[1].length).toBe(32)
+  })
+})
+
+describe('Status Page Error Cases', () => {
+  let configStore: ConfigStore
+  let secretStore: SecretStore
+
+  beforeEach(() => {
+    jest.resetAllMocks()
+    configStore = new ConfigStore('Fingerprint')
+    secretStore = new SecretStore('Fingerprint')
+  })
+
+  it('should show error when config store values are not set', async () => {
+    const request = makeRequest(new URL('https://test/status'))
+    const response = await handleRequest(request)
+    const responseText = await response.text()
+
+    expect(responseText).toContain('Your integration is not working correctly')
+    expect(responseText).toContain('<li><code>AGENT_SCRIPT_DOWNLOAD_PATH</code> (Required) is missing ❌')
+    expect(responseText).toContain('<li><code>GET_RESULT_PATH</code> (Required) is missing ❌')
+  })
+
+  it('should show error when secret store value is not set', async () => {
+    const request = makeRequest(new URL('https://test/status'))
+    const response = await handleRequest(request)
+    const responseText = await response.text()
+
+    expect(responseText).toContain('Your integration is not working correctly')
+    expect(responseText).toContain('<li><code>PROXY_SECRET</code> (Required) is missing ❌')
+  })
+
+  it('should show error when decryption key is not a valid base64', async () => {
+    // @ts-ignore
+    configStore.set('DECRYPTION_KEY', 'not-a-valid-base64')
+
+    jest.spyOn(envFunctions, 'isDecryptionKeySet').mockReturnValue(true)
+
+    const request = makeRequest(new URL('https://test/status'))
+    const response = await handleRequest(request)
+    const responseText = await response.text()
+
+    expect(responseText).toContain(
+      '<li><code>DECRYPTION_KEY</code> (Optional) is set ✅. Invalid value provided ⚠️. Please copy and paste the correct value from the dashboard.</li>'
+    )
+  })
+
+  it('should show warning when SAVE_TO_KV_STORE_PLUGIN_ENABLED is enabled but OPEN_CLIENT_RESPONSE_PLUGINS_ENABLED is not', async () => {
+    // @ts-ignore
+    configStore.set('AGENT_SCRIPT_DOWNLOAD_PATH', 'agent')
+    // @ts-ignore
+    configStore.set('GET_RESULT_PATH', 'result')
+    // @ts-ignore
+    secretStore.set('PROXY_SECRET', 'test-secret')
+    // @ts-ignore
+    configStore.set('SAVE_TO_KV_STORE_PLUGIN_ENABLED', 'true')
+    // @ts-ignore
+    configStore.set('OPEN_CLIENT_RESPONSE_PLUGINS_ENABLED', 'false')
+
+    const request = makeRequest(new URL('https://test/status'))
+    const response = await handleRequest(request)
+    const responseText = await response.text()
+
+    expect(responseText).toContain(
+      '<li><code>SAVE_TO_KV_STORE_PLUGIN_ENABLED</code> (Optional) is <code>true</code> ✅'
+    )
+    expect(responseText).toContain(
+      '<li><code>OPEN_CLIENT_RESPONSE_PLUGINS_ENABLED</code> (Optional) is <code>false</code> ✅. </li>'
+    )
+  })
+
+  it('should show error when KV store is not available', async () => {
+    // @ts-ignore
+    configStore.set('AGENT_SCRIPT_DOWNLOAD_PATH', 'agent')
+    // @ts-ignore
+    configStore.set('GET_RESULT_PATH', 'result')
+    // @ts-ignore
+    secretStore.set('PROXY_SECRET', 'test-secret')
+    // @ts-ignore
+    configStore.set('SAVE_TO_KV_STORE_PLUGIN_ENABLED', 'true')
+    // @ts-ignore
+    configStore.set('OPEN_CLIENT_RESPONSE_PLUGINS_ENABLED', 'true')
+
+    jest.spyOn(envFunctions, 'checkKVStoreAvailability').mockResolvedValue(false)
+
+    const request = makeRequest(new URL('https://test/status'))
+    const response = await handleRequest(request)
+    const responseText = await response.text()
+
+    expect(responseText).toContain(
+      "⚠️You have <code>SAVE_TO_KV_STORE_PLUGIN_ENABLED</code> enabled, but we couldn't reach your KVStore"
+    )
+  })
+})
+
+describe('Status page Backend Tests', () => {
+  beforeEach(() => {
+    jest.resetAllMocks()
+  })
+
+  it('should show warning when fpcdn.io backend is missing', () => {
+    jest.spyOn(Backend, 'exists').mockImplementation((backend) => backend !== 'fpcdn.io')
+
+    const result = getBackendsInformation()
+    expect(result).toContain('⚠️ Your integration is missing "fpcdn.io" backend host.')
+  })
+
+  it('should show warning when all region backends are missing', () => {
+    jest.spyOn(Backend, 'exists').mockReturnValue(false)
+
+    const result = getBackendsInformation()
+    expect(result).toContain(
+      '⚠️ Your integration is missing backend hosts for <a href="https://dev.fingerprint.com/docs/regions">region support</a>.'
+    )
+    expect(result).toContain(
+      'Please add at least one of the backends "api.fpjs.io", "eu.api.fpjs.io", or "ap.api.fpjs.io"'
+    )
+  })
+
+  it('should show US region when only api.fpjs.io backend exists', () => {
+    jest.spyOn(Backend, 'exists').mockImplementation((backend) => backend === 'api.fpjs.io')
+
+    const result = getBackendsInformation()
+    expect(result).toContain(
+      'Integration is configured for these <a href="https://dev.fingerprint.com/docs/regions">regions</a>: <strong>US</strong>'
+    )
+  })
+
+  it('should show EU region when only eu.api.fpjs.io backend exists', () => {
+    jest.spyOn(Backend, 'exists').mockImplementation((backend) => backend === 'eu.api.fpjs.io')
+
+    const result = getBackendsInformation()
+    expect(result).toContain(
+      'Integration is configured for these <a href="https://dev.fingerprint.com/docs/regions">regions</a>: <strong>EU</strong>'
+    )
+  })
+
+  it('should show AP region when only ap.api.fpjs.io backend exists', () => {
+    jest.spyOn(Backend, 'exists').mockImplementation((backend) => backend === 'ap.api.fpjs.io')
+
+    const result = getBackendsInformation()
+    expect(result).toContain(
+      'Integration is configured for these <a href="https://dev.fingerprint.com/docs/regions">regions</a>: <strong>AP</strong>'
+    )
+  })
+
+  it('should show US and EU regions when both backends exist', () => {
+    jest
+      .spyOn(Backend, 'exists')
+      .mockImplementation((backend) => backend === 'api.fpjs.io' || backend === 'eu.api.fpjs.io')
+
+    const result = getBackendsInformation()
+    expect(result).toContain(
+      'Integration is configured for these <a href="https://dev.fingerprint.com/docs/regions">regions</a>: <strong>US, EU</strong>'
+    )
+  })
+
+  it('should show US and AP regions when both backends exist', () => {
+    jest
+      .spyOn(Backend, 'exists')
+      .mockImplementation((backend) => backend === 'api.fpjs.io' || backend === 'ap.api.fpjs.io')
+
+    const result = getBackendsInformation()
+    expect(result).toContain(
+      'Integration is configured for these <a href="https://dev.fingerprint.com/docs/regions">regions</a>: <strong>US, AP</strong>'
+    )
+  })
+
+  it('should show EU and AP regions when both backends exist', () => {
+    jest
+      .spyOn(Backend, 'exists')
+      .mockImplementation((backend) => backend === 'eu.api.fpjs.io' || backend === 'ap.api.fpjs.io')
+
+    const result = getBackendsInformation()
+    expect(result).toContain(
+      'Integration is configured for these <a href="https://dev.fingerprint.com/docs/regions">regions</a>: <strong>EU, AP</strong>'
+    )
+  })
+
+  it('should show all regions when all backends exist', () => {
+    jest.spyOn(Backend, 'exists').mockReturnValue(true)
+
+    const result = getBackendsInformation()
+    expect(result).toContain(
+      'Integration is configured for these <a href="https://dev.fingerprint.com/docs/regions">regions</a>: <strong>US, EU, AP</strong>'
+    )
+  })
+
+  it('should show fpcdn.io warning and region information when applicable', () => {
+    jest
+      .spyOn(Backend, 'exists')
+      .mockImplementation((backend) => backend === 'api.fpjs.io' || backend === 'eu.api.fpjs.io')
+
+    const result = getBackendsInformation()
+    expect(result).toContain('⚠️ Your integration is missing "fpcdn.io" backend host.')
+    expect(result).toContain(
+      'Integration is configured for these <a href="https://dev.fingerprint.com/docs/regions">regions</a>: <strong>US, EU</strong>'
+    )
   })
 })
