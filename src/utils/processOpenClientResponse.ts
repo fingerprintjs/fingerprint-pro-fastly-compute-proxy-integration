@@ -28,7 +28,13 @@ export async function processOpenClientResponse(
   if (!decryptionKey) {
     throw new Error('Decryption key not found in secret store')
   }
-  const parsedText = JSON.parse(responseBody) as FingerprintSealedIngressResponseBody
+  let parsedText: FingerprintSealedIngressResponseBody
+  try {
+    parsedText = JSON.parse(responseBody)
+  } catch (e) {
+    console.log(`Error parsing response body as JSON: ${e}`)
+    return
+  }
   const event = unsealData(parsedText.sealedResult, decryptionKey)
   const filteredPlugins = plugins.filter((t) => t.type === 'processOpenClientResponse')
   for (const filteredPlugin of filteredPlugins) {
