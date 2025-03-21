@@ -1,3 +1,10 @@
+## [0.3.1](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/compare/v0.3.0...v0.3.1) (2025-03-20)
+
+
+### Bug Fixes
+
+* send other proxy headers even if proxy secret is undefined ([5597be5](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/commit/5597be5fd8b78251853fc8d4a4bd566699bcc830))
+
 ## [0.3.0](https://github.com/fingerprintjs/fingerprint-pro-fastly-compute-proxy-integration/compare/v0.2.1...v0.3.0) (2024-12-03)
 
 

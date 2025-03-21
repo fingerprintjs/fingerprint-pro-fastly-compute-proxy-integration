@@ -105,26 +105,46 @@ describe('Ingress', () => {
     expect(cookieValue['_iidt']).toBe('test')
   })
 
-  it('should not add proxy integration headers if PROXY_SECRET env not set', async () => {
-    const request = makeRequest(new URL('https://test/result'), { method: 'POST' })
-    await handleRequest(request)
-
-    expect(requestHeaders.has('FPJS-Proxy-Secret')).toBe(false)
-    expect(requestHeaders.has('FPJS-Proxy-Client-IP')).toBe(false)
-    expect(requestHeaders.has('FPJS-Proxy-Forwarded-Host')).toBe(false)
-  })
-
-  it('should add proxy integration headers if PROXY_SECRET is present', async () => {
+  it('should add all proxy integration headers if PROXY_SECRET is present, preserving existing headers', async () => {
+    const existingHeaderValue = 'testValue'
+    const secret = '42'
     const secretStore = new SecretStore('Fingerprint')
     // @ts-ignore
-    secretStore.set('PROXY_SECRET', 'secret')
+    secretStore.set('PROXY_SECRET', secret)
 
-    const request = makeRequest(new URL('https://test/result'), { method: 'POST' })
+    const request = makeRequest(new URL('https://test/result'), {
+      method: 'POST',
+      headers: { 'X-Test': existingHeaderValue },
+    })
     await handleRequest(request)
 
     expect(requestHeaders.has('FPJS-Proxy-Secret')).toBe(true)
     expect(requestHeaders.has('FPJS-Proxy-Client-IP')).toBe(true)
     expect(requestHeaders.has('FPJS-Proxy-Forwarded-Host')).toBe(true)
+
+    expect(requestHeaders.get('X-Test')).toBe(existingHeaderValue)
+    expect(requestHeaders.get('FPJS-Proxy-Secret')).toBe(secret)
+  })
+
+  // So Fingerprint server can know the request is coming from a proxy integration, even if the proxy secret is missing
+  it('should add the other proxy integration headers even if PROXY_SECRET is not set, preserving existing headers', async () => {
+    const existingHeaderValue = 'testValue'
+    const secretStore = new SecretStore('Fingerprint')
+    // @ts-ignore
+    // Reset the secret to undefined in case a previous test defined it
+    secretStore.set('PROXY_SECRET', undefined)
+
+    const request = makeRequest(new URL('https://test/result'), {
+      method: 'POST',
+      headers: { 'X-Test': existingHeaderValue },
+    })
+    await handleRequest(request)
+
+    expect(requestHeaders.has('FPJS-Proxy-Secret')).toBe(false)
+    expect(requestHeaders.has('FPJS-Proxy-Client-IP')).toBe(true)
+    expect(requestHeaders.has('FPJS-Proxy-Forwarded-Host')).toBe(true)
+
+    expect(requestHeaders.get('X-Test')).toBe(existingHeaderValue)
   })
 
   it('should set client ip if request has header Fastly-Client-IP', async () => {
