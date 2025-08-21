@@ -31,6 +31,7 @@ jobs:
       - name: Run test
         run: pnpm test:mock-e2e
         env:
+          MOCK_WARDEN_DOMAIN: ${{secrets.MOCK_WARDEN_DOMAIN}}
           MOCK_API_URL: 'https://${{secrets.FPJS_FASTLY_MOCK_TEST_DOMAIN}}'
           MOCK_RESULT_PATH: ${{secrets.MOCK_RESULT_PATH}}
           MOCK_AGENT_PATH: ${{secrets.MOCK_AGENT_PATH}}
