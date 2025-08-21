@@ -20,7 +20,7 @@ async function main() {
   console.info(`Running mock e2e tests for`, apiUrl)
 
   execSync(
-    `npm exec -y "git+https://github.com/fingerprintjs/dx-team-mock-for-proxy-integrations-e2e-tests.git" -- --integration-url="${apiUrl}" --api-url="https://${apiUrl}" --cdn-path="${agentPath}" --ingress-path="${resultPath}" --traffic-name=fingerprint-pro-fastly-compute --integration-version=${pkg.version}`,
+    `npm exec -y "git+https://github.com/fingerprintjs/dx-team-mock-for-proxy-integrations-e2e-tests.git" -- --integration-url="${apiUrl}" --api-url="${apiUrl}" --cdn-path="${agentPath}" --ingress-path="${resultPath}" --traffic-name=fingerprint-pro-fastly-compute --integration-version=${pkg.version}`,
     {
       stdio: 'inherit',
     }
