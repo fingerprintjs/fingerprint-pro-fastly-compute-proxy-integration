@@ -10,26 +10,18 @@ function getEnv(name: string) {
 }
 
 async function main() {
-  const apiUrl = getEnv('API_URL')
-  const agentPath = getEnv('AGENT_PATH')
-  const resultPath = getEnv('RESULT_PATH')
-  const host = getEnv('TEST_DOMAIN')
-
-  const agentUrl = new URL(host)
-  agentUrl.pathname = agentPath
-
-  const resultUrl = new URL(host)
-  resultUrl.pathname = resultPath
+  const mockWardenDomain = getEnv('MOCK_WARDEN_DOMAIN')
+  const integrationUrl = getEnv('MOCK_API_URL')
+  const agentPath = getEnv('MOCK_AGENT_PATH')
+  const resultPath = getEnv('MOCK_RESULT_PATH')
 
   console.info('Agent download path:', agentPath)
   console.info('Get result path:', resultPath)
 
-  console.info(`Running mock e2e tests for`, host)
+  console.info(`Running mock e2e tests for`, integrationUrl)
 
   execSync(
-    `npm exec -y "git+https://github.com/fingerprintjs/dx-team-mock-for-proxy-integrations-e2e-tests.git" -- --api-url="https://${apiUrl}" --cdn-proxy-url="${agentUrl.toString()}" --ingress-proxy-url="${resultUrl.toString()}" --traffic-name=fingerprint-pro-fastly-compute --integration-version=${
-      pkg.version
-    }`,
+    `npm exec -y "git+https://github.com/fingerprintjs/dx-team-mock-for-proxy-integrations-e2e-tests.git" -- --integration-url="${integrationUrl}" --api-url="https://${mockWardenDomain}" --cdn-path="${agentPath}" --ingress-path="${resultPath}" --traffic-name=fingerprint-pro-fastly-compute --integration-version=${pkg.version}`,
     {
       stdio: 'inherit',
     }
