@@ -12,7 +12,7 @@ import { getIngressBackendByRegion } from '../utils/getIngressBackendByRegion'
 import { CacheOverride } from 'fastly:cache-override'
 
 async function makeIngressRequest(receivedRequest: Request, env: IntegrationEnv) {
-  if (!isProxySecretSet) {
+  if (!isProxySecretSet(env)) {
     console.log("PROXY_SECRET is not set in the integration's Secret store, your integration is not working correctly.")
   }
   const url = new URL(receivedRequest.url)

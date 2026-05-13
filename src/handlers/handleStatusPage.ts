@@ -126,7 +126,7 @@ function buildConfigurationMessage(config: ConfigurationStatus, env: Integration
     }
   }
 
-  return `<li><code>${label}</code> (${required ? 'Required' : 'Optional'}) is ${isSet ? `${showValue ? `<code>${value}</code>` : 'set'} ✅` : `${required ? 'missing ❌' : 'not set ⚠️'}`}. ${message ?? ''}</li>`
+  return `<li><code>${label}</code> (${required ? 'Required' : 'Optional'}) is ${isSet ? `${showValue === true ? `<code>${value}</code>` : 'set'} ✅` : `${required ? 'missing ❌' : 'not set ⚠️'}`}. ${message ?? ''}</li>`
 }
 
 async function buildKVStoreCheckMessage(): Promise<string> {
