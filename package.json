@@ -1,14 +1,17 @@
 {
   "name": "fingerprint-pro-fastly-compute-proxy-integration",
   "version": "0.3.1",
+  "private": true,
   "engines": {
     "node": ">=20"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.31.0",
     "@babel/core": "^7.25.2",
     "@babel/preset-env": "^7.25.4",
     "@babel/preset-typescript": "^7.24.7",
     "@fastly/cli": "^10.17.0",
+    "@fingerprintjs/changesets-changelog-format": "^0.2.0",
     "@fingerprintjs/commit-lint-dx-team": "^0.1.0",
     "@fingerprintjs/conventional-changelog-dx-team": "^0.1.0",
     "@fingerprintjs/eslint-config-dx-team": "^0.1.0",
@@ -45,6 +48,8 @@
     "artifact:create": "fastly compute build",
     "deploy": "fastly compute publish",
     "dev": "fastly compute serve",
+    "changeset:version": "changeset version",
+    "changeset:publish": "changeset publish",
     "prepare": "husky",
     "lint": "eslint --ext .js,.ts,.mjs --ignore-path .gitignore --max-warnings 0 src/",
     "lint:fix": "pnpm lint --fix",
