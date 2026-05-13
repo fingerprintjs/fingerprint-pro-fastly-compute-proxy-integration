@@ -1,9 +1,9 @@
 import { describe, expect, it, jest, beforeAll, afterAll } from '@jest/globals'
 import { decrypt } from '../../src/utils/decrypt'
-import { gcm } from '@noble/ciphers/aes'
+import { gcm } from '@noble/ciphers/aes.js'
 import { inflateRaw } from 'pako'
 
-jest.mock('@noble/ciphers/aes')
+jest.mock('@noble/ciphers/aes.js')
 jest.mock('pako')
 
 describe('decrypt', () => {
