@@ -35,7 +35,7 @@ describe('Browser Cache', () => {
     const request = makeRequest(new URL('https://test/result'))
     await handleRequest(request)
 
-    expect(fetch).toBeCalledWith(
+    expect(fetch).toHaveBeenCalledWith(
       expect.objectContaining({ method: 'GET' }),
       expect.objectContaining({ backend: 'api.fpjs.io', cacheOverride: expect.objectContaining({ mode: 'pass' }) })
     )
@@ -77,7 +77,7 @@ describe('Ingress', () => {
     const request = makeRequest(new URL('https://test/result'), { method: 'POST' })
     await handleRequest(request)
 
-    expect(fetch).toBeCalledWith(
+    expect(fetch).toHaveBeenCalledWith(
       expect.objectContaining({ method: 'POST' }),
       expect.objectContaining({ backend: 'api.fpjs.io' })
     )
