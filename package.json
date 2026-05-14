@@ -18,7 +18,7 @@
     "@fingerprintjs/prettier-config-dx-team": "^0.2.0",
     "@fingerprintjs/tsconfig-dx-team": "^0.0.2",
     "@jest/globals": "^30.4.1",
-    "@noble/ciphers": "^1.0.0",
+    "@noble/ciphers": "^2.2.0",
     "@types/cookie": "^0.6.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^22.7.0",

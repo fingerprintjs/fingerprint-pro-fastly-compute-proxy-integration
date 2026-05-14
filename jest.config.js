@@ -6,4 +6,7 @@ module.exports = {
   collectCoverageFrom: ['./src/**/*.ts'],
   coverageReporters: ['lcov', 'json-summary', ['text', { file: 'coverage.txt', path: './' }]],
   setupFiles: ['./jest.setup.js'],
+  moduleNameMapper: {
+    '@noble/ciphers/aes.js': '<rootDir>/__mocks__/@noble/ciphers/aes.js',
+  },
 }

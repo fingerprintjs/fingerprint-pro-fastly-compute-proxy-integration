@@ -1,4 +1,4 @@
-import { gcm } from '@noble/ciphers/aes'
+import { gcm } from '@noble/ciphers/aes.js'
 import { inflateRaw } from 'pako'
 
 const SEALED_HEADER = new Uint8Array([0x9e, 0x85, 0xdc, 0xed])
