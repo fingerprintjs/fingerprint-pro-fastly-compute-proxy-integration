@@ -22,7 +22,7 @@
     "@types/cookie": "^0.6.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^22.7.0",
-    "@types/pako": "^2.0.3",
+    "@types/pako": "^2.0.4",
     "babel-jest": "^30.4.1",
     "esbuild": "^0.24.0",
     "fastly": "^7.10.0",
@@ -66,5 +66,6 @@
   },
   "peerDependencies": {
     "@fingerprintjs/fingerprintjs-pro-server-api": "^5.2.0"
-  }
+  },
+  "packageManager": "pnpm@9.15.1+sha512.1acb565e6193efbebda772702950469150cf12bcc764262e7587e71d19dc98a423dff9536e57ea44c49bdf790ff694e83c27be5faa23d67e0c033b583be4bfcf"
 }

@@ -67,7 +67,7 @@ importers:
         specifier: ^22.7.0
         version: 22.7.9
       '@types/pako':
-        specifier: ^2.0.3
+        specifier: ^2.0.4
         version: 2.0.4
       babel-jest:
         specifier: ^30.4.1
