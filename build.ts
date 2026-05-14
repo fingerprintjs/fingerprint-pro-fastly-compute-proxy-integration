@@ -10,4 +10,7 @@ build({
   format: 'cjs',
   external: ['fastly:*'],
   define: { 'process.env.STORE_NAME_PREFIX': `"${configStoreNamePrefix}"` },
-}).catch(() => process.exit(1))
+}).catch((e) => {
+  console.error(e)
+  process.exit(1)
+})
