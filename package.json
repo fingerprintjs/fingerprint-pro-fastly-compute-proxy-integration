@@ -10,7 +10,7 @@
     "@babel/core": "^7.29.0",
     "@babel/preset-env": "^7.29.5",
     "@babel/preset-typescript": "^7.28.5",
-    "@fastly/cli": "^10.17.0",
+    "@fastly/cli": "^15.0.0",
     "@fingerprintjs/changesets-changelog-format": "^0.2.0",
     "@fingerprintjs/commit-lint-dx-team": "^0.1.0",
     "@fingerprintjs/conventional-changelog-dx-team": "^0.1.0",
@@ -25,22 +25,22 @@
     "@types/pako": "^2.0.4",
     "babel-jest": "^30.4.1",
     "esbuild": "^0.24.0",
-    "fastly": "^7.10.0",
+    "fastly": "^15.1.0",
     "husky": "^9.1.5",
     "jest": "^30.4.2",
     "pako": "^2.1.0",
     "ts-jest": "^29.4.9",
     "ts-node": "^10.9.2",
     "tslib": "^2.8.1",
-    "typescript": "5.3.3"
+    "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@fastly/js-compute": "^3.21.4",
+    "@fastly/js-compute": "^3.42.0",
     "cookie": "0.7.0"
   },
   "scripts": {
     "assemble": "js-compute-runtime build/index.js bin/main.wasm",
-    "pack": "fastly compute pack --wasm-binary=./bin/main.wasm && mv pkg/package.tar.gz pkg/fingerprint-fastly-compute-proxy-integration.tar.gz",
+    "pack": "fastly compute pack --wasm-binary=./bin/main.wasm",
     "build": "ts-node build.ts && fastly compute metadata --enable && pnpm run assemble && pnpm run pack",
     "artifact:create": "fastly compute build",
     "deploy": "fastly compute publish",
